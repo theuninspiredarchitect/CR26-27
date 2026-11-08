@@ -143,9 +143,9 @@
 
 <section class="hero fade">
   <h1 class="title"><em>Costa Rica</em><br>26/27</h1>
-  <p class="lead">Josef and Renate, three weeks from the cloud forest to the Pacific. 21 December to 12 January.</p>
+  <p class="lead">Josef and Renate, three weeks from San José to the Pacific. 21 December to 12 January.</p>
   <a class="link" href="#stays">Explore the stays</a>
-  <div class="fig" style="margin-top:26px;aspect-ratio:4/5"><img src="img/savegre.jpg" alt="Savegre valley" onerror="this.onerror=null;this.src='img/gen-savegre.jpg'"><span class="pill tl"><span class="n">02</span>Quetzal, Savegre valley</span></div>
+  <div class="fig" style="margin-top:26px;aspect-ratio:4/5"><img src="img/santalucia.jpg" alt="Santa Lucia Jungle Hacienda" onerror="this.onerror=null;this.src='img/gen-santalucia.jpg'"><span class="pill tl"><span class="n">03</span>Santa Lucia, Carara</span></div>
   <div class="meter">
     <div><div class="l">Booked</div><div class="v" id="statBooked">0 / 0</div><div class="bar"><i id="barBooked"></i></div></div>
     <div><div class="l">Budget</div><div class="v" id="statTotal">$0</div></div>
@@ -155,8 +155,8 @@
 
 <section id="stays" class="fade">
   <div class="eyebrow">Accommodation</div>
-  <h2 class="big">Seven stops, from the cloud forest to the Pacific</h2>
-  <p class="lead">Christmas at home in San José, quetzals in Copey, New Year by the jungle, a week on the beach in Guanacaste and a surf town finale. Tap the plus to fold a stop away. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
+  <h2 class="big">Six stops, from San José to the Pacific</h2>
+  <p class="lead">Christmas at home in San José, New Year in Escazú with the Portillo family, jungle days near Jacó, a week on the beach in Guanacaste and a surf town finale. Tap the plus to fold a stop away. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
   <div class="list" id="list"></div>
 </section>
 
@@ -183,10 +183,9 @@
 
 <script>
 const LEGS = [
-  { id:"sj1", type:"home", from:"21 Dec", to:"25 Dec", nights:4, title:"Christmas in San José", place:"Home base. Josef and Renate land at SJO on the 21st, Christmas Eve at home.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Home","Christmas Eve"], drive:"Airport pickup at SJO on the 21st.", trackable:false },
-  { id:"savegre", type:"hotel", from:"25 Dec", to:"28 Dec", nights:3, title:"Cloud forest in Copey", place:"Hotel Savegre sits in the Savegre valley at San Gerardo de Dota, one of the best places in the country to see quetzals. Spa, trout river and cold mountain nights.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Hotel Savegre", tags:["Quetzals","Spa","Pack layers"], drive:"Roughly 2 hours from San José over Cerro de la Muerte.", trackable:true },
-  { id:"sj2", type:"home", from:"28 Dec", to:"31 Dec", nights:3, title:"Back in San José", place:"A few quiet days at home before heading to the coast.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Home"], drive:"About 2 hours back down from the mountains.", trackable:false },
-  { id:"santalucia", type:"hotel", from:"31 Dec", to:"4 Jan", nights:4, title:"New Year near Jacó", place:"Santa Lucia Jungle Hacienda, a new Autograph Collection hotel at the edge of Carara National Park by the Tárcoles river. Two pools, kids club, scarlet macaws over the garden.", hotel:{name:"Santa Lucia Jungle Hacienda", url:"https://www.marriott.com/SJOSL"}, img:"img/santalucia.jpg", fallback:"img/gen-santalucia.jpg", cap:"Santa Lucia Jungle Hacienda", tags:["New Year's Eve","Kids club","Two pools"], drive:"About 1.5 hours from San José on Route 27.", trackable:true },
+  { id:"sj1", type:"home", from:"21 Dec", to:"31 Dec", nights:10, title:"Christmas in San José", place:"Home base. Josef and Renate land at SJO on the 21st, Christmas Eve at home and a quiet week in the Central Valley before the coast.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Home","Christmas Eve"], drive:"Airport pickup at SJO on the 21st.", trackable:false },
+  { id:"intercontinental", type:"hotel", from:"31 Dec", to:"2 Jan", nights:2, title:"New Year in Escazú", place:"Real InterContinental at Multiplaza, Escazú. New Year's Eve party with the Portillo family, three pools and the biggest spa in Central America to recover on the 1st.", hotel:{name:"InterContinental Costa Rica", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}, img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["New Year's Eve","Portillo family","Spa"], drive:"20 minutes from home.", trackable:true },
+  { id:"santalucia", type:"hotel", from:"2 Jan", to:"4 Jan", nights:2, title:"Jungle days near Jacó", place:"Santa Lucia Jungle Hacienda, a new Autograph Collection hotel at the edge of Carara National Park by the Tárcoles river. Two pools, kids club, scarlet macaws over the garden.", hotel:{name:"Santa Lucia Jungle Hacienda", url:"https://www.marriott.com/SJOSL"}, img:"img/santalucia.jpg", fallback:"img/gen-santalucia.jpg", cap:"Santa Lucia Jungle Hacienda", tags:["Kids club","Two pools","Carara"], drive:"About 1.5 hours from Escazú on Route 27.", trackable:true },
   { id:"jw", type:"hotel", from:"4 Jan", to:"10 Jan", nights:6, title:"All inclusive in Guanacaste", place:"JW Marriott Costa Elena on Playa El Jobo, the brand's first all inclusive. Beachfront, the largest pool in Costa Rica, Family by JW program for the little one.", hotel:{name:"JW Marriott Costa Elena", url:"https://www.marriott.com/LIRCJ"}, img:"https://cache.marriott.com/is/image/marriotts7prod/jw-lircj-aerial-view-33879:Wide-Hor?wid=1600&fit=constrain", fallback:"img/gen-jw.jpg", cap:"JW Marriott Costa Elena", tags:["All inclusive","Beachfront","Kids program"], drive:"Long travel day, around 5 hours up the Pacific coast. Lunch stop in Liberia or Playas del Coco.", trackable:true },
   { id:"silvestre", type:"hotel", from:"10 Jan", to:"12 Jan", nights:2, title:"Surf town finale in Nosara", place:"Silvestre Nosara, nine residences steps from Playa Guiones with a rooftop pool and kitchens in every unit. Residences sleep 4 to 6, so one unit fits all of us.", hotel:{name:"Silvestre Nosara", url:"https://silvestre.cr"}, img:"img/silvestre.jpg", fallback:"img/gen-silvestre.jpg", cap:"Silvestre Nosara", tags:["Beach","Rooftop pool","Sleeps 4 to 6"], drive:"Around 3.5 hours south, last stretch on gravel. 4x4 recommended.", trackable:true },
   { id:"flight", type:"flight", from:"12 Jan", to:"21 Jan", nights:0, title:"Flight back to Vienna", place:"Nosara to SJO is about 4.5 hours by car, or a short domestic hop to San José. Check whether the return leaves from SJO or LIR, Liberia is much closer.", hotel:null, img:"img/gen-flight.jpg", cap:"Vienna", tags:["Flight","Vienna until 21 Jan"], drive:null, trackable:true, isFlight:true }
