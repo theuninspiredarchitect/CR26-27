@@ -94,6 +94,10 @@
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
   .chip{font-size:11px;font-weight:500;padding:6px 10px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);opacity:.8}
 
+  .details{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13px;margin-bottom:18px;padding:14px 16px;background:#fff;border-radius:14px}
+  .details dt{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:600;padding-top:3px}
+  .details dd{margin:0;font-weight:500;word-break:break-word}
+  .details dd.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;letter-spacing:.06em}
   .ctl{background:#fff;border-radius:var(--r);padding:14px}
   .ctl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .tog{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;cursor:pointer;user-select:none}
@@ -187,9 +191,9 @@
 <script>
 const LEGS = [
   { id:"sj1", type:"home", from:"21 Dec", to:"25 Dec", nights:4, title:"Christmas in San José", place:"Home base. Josef and Renate land at SJO on the 21st, Christmas Eve at home.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Home","Christmas Eve"], drive:"Airport pickup at SJO on the 21st.", trackable:false },
-  { id:"savegre", type:"hotel", from:"25 Dec", to:"28 Dec", nights:3, title:"Cloud forest in Copey", place:"Hotel Savegre in the Savegre valley at San Gerardo de Dota, one of the best places in the country to see quetzals. Booked via Booking.com: 2 rooms for 3 nights, breakfast included, $2,177.05 total, pay at the hotel, free cancellation until 25 November 2026.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, links:[{label:"Booking.com", url:"https://secure.booking.com/myreservations.html"}], img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal, Savegre valley", tags:["Quetzals","Spa","2 rooms","Breakfast included"], drive:"Roughly 2 hours from San José over Cerro de la Muerte. Pack layers, nights get cold.", trackable:true, defaultPrice:2177, defaultBooked:true, defaultNotes:"Booking.com confirmation 5738425501" },
+  { id:"savegre", type:"hotel", from:"25 Dec", to:"28 Dec", nights:3, title:"Cloud forest in Copey", place:"Hotel Savegre in the Savegre valley at San Gerardo de Dota, one of the best places in the country to see quetzals. Booked via Booking.com: 2 rooms for 3 nights, breakfast included, $2,177.05 total, pay at the hotel, free cancellation until 25 November 2026.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, links:[{label:"Booking.com", url:"https://secure.booking.com/myreservations.html"}], img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal, Savegre valley", tags:["Quetzals","Spa","2 rooms","Breakfast included"], drive:"Roughly 2 hours from San José over Cerro de la Muerte. Pack layers, nights get cold.", trackable:true, defaultPrice:2177, defaultBooked:true, defaultNotes:"", details:[["Confirmation","5738425501"],["PIN","4433"],["Rooms","2 rooms, 3 nights, breakfast included"],["Total","$2,177.05, pay at the hotel"],["Cancellation","Free until 25 Nov 2026"],["Booked via","Booking.com"]] },
   { id:"sj2", type:"home", from:"28 Dec", to:"31 Dec", nights:3, title:"Back in San José", place:"A few quiet days at home before New Year.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Home"], drive:"About 2 hours back down from the mountains.", trackable:false },
-  { id:"intercontinental", type:"hotel", from:"31 Dec", to:"2 Jan", nights:2, title:"New Year in Escazú", place:"Real InterContinental at Multiplaza, Escazú. New Year's Eve party with the Portillo family, three pools and the biggest spa in Central America to recover on the 1st. Booked via Booking.com: 2 x Classic King Room with Pool View, $1,220.40 for the two nights including 13% VAT, pay at the hotel, free cancellation until 29 December 2026.", hotel:{name:"InterContinental Costa Rica", url:"https://www.booking.com/hotel/cr/real-intercontinental.en-gb.html?checkin=2026-12-31&checkout=2027-01-02&group_adults=4&group_children=1&age=3&no_rooms=2"}, links:[{label:"Hotel site", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}], img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["New Year's Eve","Portillo family","2 x King pool view","Free cancellation to 29 Dec"], drive:"20 minutes from home.", trackable:true, defaultPrice:1220 },
+  { id:"intercontinental", type:"hotel", from:"31 Dec", to:"2 Jan", nights:2, title:"New Year in Escazú", place:"Real InterContinental at Multiplaza, Escazú. New Year's Eve party with the Portillo family, three pools and the biggest spa in Central America to recover on the 1st. Booked via Booking.com: 2 x Classic King Room with Pool View, $1,220.40 for the two nights including 13% VAT, pay at the hotel, free cancellation until 29 December 2026.", hotel:{name:"InterContinental Costa Rica", url:"https://www.booking.com/hotel/cr/real-intercontinental.en-gb.html?checkin=2026-12-31&checkout=2027-01-02&group_adults=4&group_children=1&age=3&no_rooms=2"}, links:[{label:"Hotel site", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}], img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["New Year's Eve","Portillo family","2 x King pool view","Free cancellation to 29 Dec"], drive:"20 minutes from home.", trackable:true, defaultPrice:1220, details:[["Rooms","2 x Classic King Room with Pool View"],["Total","$1,220.40 incl. 13% VAT, pay at the hotel"],["Cancellation","Free until 29 Dec 2026"],["Confirmation","pending"],["Booked via","Booking.com"]] },
   { id:"open", type:"open", from:"2 Jan", to:"4 Jan", nights:2, title:"Two nights, location open", place:"Still to decide. Somewhere on the way to Guanacaste would make the long drive on the 4th easier: Jacó or Herradura, Monteverde, or straight up to Tamarindo or Playas del Coco. Drop ideas and quotes in the notes.", hotel:null, img:null, cap:"To be decided", tags:["Open","On the way north"], drive:"Pick a spot that splits the drive to Costa Elena.", trackable:true },
   { id:"jw", type:"hotel", from:"4 Jan", to:"10 Jan", nights:6, title:"All inclusive in Guanacaste", place:"JW Marriott Costa Elena on Playa El Jobo, the brand's first all inclusive. Beachfront, the largest pool in Costa Rica, Family by JW program for the little one.", hotel:{name:"JW Marriott Costa Elena", url:"https://www.marriott.com/LIRCJ"}, img:"https://cache.marriott.com/is/image/marriotts7prod/jw-lircj-aerial-view-33879:Wide-Hor?wid=1600&fit=constrain", fallback:"img/gen-jw.jpg", cap:"JW Marriott Costa Elena", tags:["All inclusive","Beachfront","Kids program"], drive:"Around 5 hours from the Central Valley, less from wherever the 2 to 4 Jan stop ends up.", trackable:true },
   { id:"silvestre", type:"hotel", from:"10 Jan", to:"12 Jan", nights:2, title:"Surf town finale in Nosara", place:"Silvestre Nosara, nine residences steps from Playa Guiones with a rooftop pool and kitchens in every unit. Residences sleep 4 to 6, so one unit fits all of us.", hotel:{name:"Silvestre Nosara", url:"https://silvestre.cr"}, img:"img/silvestre.jpg", fallback:"img/gen-silvestre.jpg", cap:"Silvestre Nosara", tags:["Beach","Rooftop pool","Sleeps 4 to 6"], drive:"Around 3.5 hours south, last stretch on gravel. 4x4 recommended.", trackable:true },
@@ -204,7 +208,8 @@ let closed = new Set();
 try { closed = new Set(JSON.parse(sessionStorage.getItem(KEY+"-closed")||"[]")); } catch(e){}
 const isOpen = id => !closed.has(id);
 if(state.intercontinental && state.intercontinental.price==="1126") state.intercontinental.price="1220";
-if(state.savegre && !state.savegre.booked && !state.savegre.price){ state.savegre.booked=true; state.savegre.price="2177"; if(!state.savegre.notes) state.savegre.notes="Booking.com confirmation 5738425501"; }
+if(state.savegre && !state.savegre.booked && !state.savegre.price){ state.savegre.booked=true; state.savegre.price="2177"; }
+if(state.savegre && state.savegre.notes==="Booking.com confirmation 5738425501") state.savegre.notes="";
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
 function get(id){ if(!state[id]){ const l=LEGS.find(x=>x.id===id); state[id]={booked:!!(l&&l.defaultBooked), price:(l&&l.defaultPrice)?String(l.defaultPrice):"", notes:(l&&l.defaultNotes)||""}; } return state[id]; }
 function money(n){ return "$"+n.toLocaleString("en-US",{maximumFractionDigits:0}); }
@@ -238,6 +243,7 @@ function render(){
           ${leg.links ? leg.links.map(l=>`<a class="pill br" href="${l.url}" target="_blank" rel="noopener">${l.label} ↗</a>`).join("") : (leg.hotel ? `<a class="pill br" href="${leg.hotel.url}" target="_blank" rel="noopener">Hotel site ↗</a>` : "")}
         </div>` : `<div class="fig open"><span class="q">?</span><span class="pill tl"><span class="n">${pad(i+1)}</span>Location open</span></div>`}
         <div class="chips">${leg.tags.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+        ${leg.details ? `<dl class="details">${leg.details.map(([k,v])=>`<dt>${k}</dt><dd class="${/^(Confirmation|PIN)$/.test(k)&&v!=="pending"?"code":""}">${v}</dd>`).join("")}</dl>` : ""}
         ${leg.trackable ? `
         <div class="ctl">
           <div class="ctl-top">
@@ -295,6 +301,7 @@ function copyPlan(){
     const s = get(l.id);
     out += `${l.from} to ${l.to}: ${l.title}`;
     if(l.hotel) out += `\n  ${l.hotel.name} (${l.hotel.url})`;
+    if(l.details) l.details.forEach(([k,v])=>{ out += `\n  ${k}: ${v}`; });
     if(l.trackable) out += `\n  ${s.booked?"BOOKED":"not booked"}${s.price?`, $${s.price}`:""}${s.notes?`, ${s.notes}`:""}`;
     out += "\n\n";
   });
