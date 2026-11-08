@@ -148,7 +148,7 @@
 <section id="stays" class="fade">
   <div class="eyebrow">Accommodation</div>
   <h2 class="big">Seven stops, from the cloud forest to the Pacific</h2>
-  <p class="lead">Christmas at home in San José, quetzals in Copey, New Year by the jungle, a week on the beach in Guanacaste and a surf town finale. Tap a stop to open it. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
+  <p class="lead">Christmas at home in San José, quetzals in Copey, New Year by the jungle, a week on the beach in Guanacaste and a surf town finale. Tap the plus to fold a stop away. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
   <div class="list" id="list"></div>
 </section>
 
@@ -187,8 +187,9 @@ const LEGS = [
 const KEY = "cr-trip-2026-v1";
 let state = {};
 try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { state = {}; }
-let openId = null;
-try { openId = sessionStorage.getItem(KEY+"-open"); } catch(e){}
+let closed = new Set();
+try { closed = new Set(JSON.parse(sessionStorage.getItem(KEY+"-closed")||"[]")); } catch(e){}
+const isOpen = id => !closed.has(id);
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
 function get(id){ return state[id] || (state[id] = {booked:false, price:"", notes:""}); }
 function money(n){ return "$"+n.toLocaleString("en-US",{maximumFractionDigits:0}); }
@@ -202,13 +203,13 @@ function render(){
   LEGS.forEach((leg,i) => {
     const s = get(leg.id);
     const row = document.createElement("div");
-    row.className = "row" + (openId===leg.id?" open":"") + (s.booked&&leg.trackable?" booked":"");
+    row.className = "row" + (isOpen(leg.id)?" open":"") + (s.booked&&leg.trackable?" booked":"");
     row.dataset.id = leg.id;
     const nightsTxt = leg.isFlight ? "travel day" : leg.nights + (leg.nights===1?" night":" nights");
     const status = leg.trackable ? (s.booked?"booked":"not booked") : "home";
     const fb = leg.fallback ? `onerror="this.onerror=null;this.src='${leg.fallback}'"` : "";
     row.innerHTML = `
-      <button class="row-h" aria-expanded="${openId===leg.id}">
+      <button class="row-h" aria-expanded="${isOpen(leg.id)}">
         <div><div class="t">${leg.title}</div><div class="d"><span class="b"></span>${leg.from} to ${leg.to} · ${nightsTxt} · ${status}</div></div>
         ${plus}
       </button>
@@ -239,9 +240,9 @@ function render(){
 list.addEventListener("click", e => {
   const h = e.target.closest(".row-h"); if(!h) return;
   const row = h.closest(".row"); const id = row.dataset.id;
-  openId = (openId===id) ? null : id;
-  try { sessionStorage.setItem(KEY+"-open", openId||""); } catch(e){}
-  document.querySelectorAll(".row").forEach(r=>{ const on = r.dataset.id===openId; r.classList.toggle("open",on); r.querySelector(".row-h").setAttribute("aria-expanded",on); });
+  if(closed.has(id)) closed.delete(id); else closed.add(id);
+  try { sessionStorage.setItem(KEY+"-closed", JSON.stringify([...closed])); } catch(e){}
+  const on = isOpen(id); row.classList.toggle("open",on); h.setAttribute("aria-expanded",on);
 });
 list.addEventListener("change", e => {
   const t = e.target; if(!t.dataset.id || t.dataset.k!=="booked") return;
