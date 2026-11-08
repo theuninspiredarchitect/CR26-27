@@ -55,11 +55,19 @@
   .meter .bar i{display:block;height:100%;background:var(--lime);width:0;transition:width .5s var(--ease)}
 
   /* accordion */
-  .list{margin-top:26px;border-top:1px solid var(--line)}
-  .row{border-bottom:1px solid var(--line)}
-  .row-h{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;text-align:left}
-  .row-h .t{font-size:clamp(24px,5vw,30px);font-weight:500;letter-spacing:-.02em;line-height:1.15}
+  .list{margin-top:30px;position:relative;padding-left:44px}
+  .list::before{content:"";position:absolute;left:11px;top:14px;bottom:14px;width:2px;background:var(--ink);opacity:.25}
+  .row{position:relative;padding-bottom:28px}
+  .row::before{content:"";position:absolute;left:-44px;top:6px;width:24px;height:24px;border-radius:50%;background:var(--bg);border:3px solid var(--ink);box-shadow:0 0 0 5px var(--bg);z-index:1;transition:background .25s}
+  .row.booked::before{background:var(--lime);border-color:var(--ink)}
+  .row:last-child{padding-bottom:0}
+  .date{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+  .date .big{font-size:clamp(20px,5vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
+  .date .sub{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+  .row-h{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:0 0 14px;text-align:left}
+  .row-h .t{font-size:clamp(22px,5vw,28px);font-weight:500;letter-spacing:-.02em;line-height:1.15;margin-top:6px}
   .row-h .d{font-size:12px;color:var(--mute);margin-top:6px;display:flex;gap:8px;align-items:center}
+  .row-h .d .b{display:none}
   .row-h .d .b{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--line)}
   .row.booked .row-h .d .b{background:var(--lime)}
   .row-h .circle svg{transition:transform .3s var(--ease)}
@@ -210,7 +218,7 @@ function render(){
     const fb = leg.fallback ? `onerror="this.onerror=null;this.src='${leg.fallback}'"` : "";
     row.innerHTML = `
       <button class="row-h" aria-expanded="${isOpen(leg.id)}">
-        <div><div class="t">${leg.title}</div><div class="d"><span class="b"></span>${leg.from} to ${leg.to} · ${nightsTxt} · ${status}</div></div>
+        <div><div class="date"><span class="big">${leg.from} → ${leg.to}</span><span class="sub">${nightsTxt}</span></div><div class="t">${leg.title}</div><div class="d">${status}</div></div>
         ${plus}
       </button>
       <div class="row-c"><div><div class="row-b">
@@ -250,7 +258,7 @@ list.addEventListener("change", e => {
   const row = t.closest(".row"); row.classList.toggle("booked", s.booked);
   const tog = t.closest(".tog"); tog.classList.toggle("on", s.booked); tog.lastChild.textContent = s.booked?"Booked":"Not booked yet";
   const leg = LEGS.find(l=>l.id===t.dataset.id); const nightsTxt = leg.isFlight ? "travel day" : leg.nights + (leg.nights===1?" night":" nights");
-  row.querySelector(".row-h .d").innerHTML = `<span class="b"></span>${leg.from} to ${leg.to} · ${nightsTxt} · ${s.booked?"booked":"not booked"}`;
+  row.querySelector(".row-h .d").textContent = s.booked?"booked":"not booked";
   stats();
 });
 list.addEventListener("input", e => {
