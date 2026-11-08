@@ -187,7 +187,7 @@
 <script>
 const LEGS = [
   { id:"sj1", type:"home", from:"21 Dec", to:"25 Dec", nights:4, title:"Christmas in San José", place:"Home base. Josef and Renate land at SJO on the 21st, Christmas Eve at home.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Home","Christmas Eve"], drive:"Airport pickup at SJO on the 21st.", trackable:false },
-  { id:"savegre", type:"hotel", from:"25 Dec", to:"28 Dec", nights:3, title:"Cloud forest in Copey", place:"Hotel Savegre sits in the Savegre valley at San Gerardo de Dota, one of the best places in the country to see quetzals. Spa, trout river and cold mountain nights.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal, Savegre valley", tags:["Quetzals","Spa","Pack layers"], drive:"Roughly 2 hours from San José over Cerro de la Muerte.", trackable:true },
+  { id:"savegre", type:"hotel", from:"25 Dec", to:"28 Dec", nights:3, title:"Cloud forest in Copey", place:"Hotel Savegre in the Savegre valley at San Gerardo de Dota, one of the best places in the country to see quetzals. Booked via Booking.com: 2 rooms for 3 nights, breakfast included, $2,177.05 total, pay at the hotel, free cancellation until 25 November 2026.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, links:[{label:"Booking.com", url:"https://secure.booking.com/myreservations.html"}], img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal, Savegre valley", tags:["Quetzals","Spa","2 rooms","Breakfast included"], drive:"Roughly 2 hours from San José over Cerro de la Muerte. Pack layers, nights get cold.", trackable:true, defaultPrice:2177, defaultBooked:true, defaultNotes:"Booking.com confirmation 5738425501" },
   { id:"sj2", type:"home", from:"28 Dec", to:"31 Dec", nights:3, title:"Back in San José", place:"A few quiet days at home before New Year.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Home"], drive:"About 2 hours back down from the mountains.", trackable:false },
   { id:"intercontinental", type:"hotel", from:"31 Dec", to:"2 Jan", nights:2, title:"New Year in Escazú", place:"Real InterContinental at Multiplaza, Escazú. New Year's Eve party with the Portillo family, three pools and the biggest spa in Central America to recover on the 1st. Booked via Booking.com: 2 x Classic King Room with Pool View, $1,220.40 for the two nights including 13% VAT, pay at the hotel, free cancellation until 29 December 2026.", hotel:{name:"InterContinental Costa Rica", url:"https://www.booking.com/hotel/cr/real-intercontinental.en-gb.html?checkin=2026-12-31&checkout=2027-01-02&group_adults=4&group_children=1&age=3&no_rooms=2"}, links:[{label:"Hotel site", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}], img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["New Year's Eve","Portillo family","2 x King pool view","Free cancellation to 29 Dec"], drive:"20 minutes from home.", trackable:true, defaultPrice:1220 },
   { id:"open", type:"open", from:"2 Jan", to:"4 Jan", nights:2, title:"Two nights, location open", place:"Still to decide. Somewhere on the way to Guanacaste would make the long drive on the 4th easier: Jacó or Herradura, Monteverde, or straight up to Tamarindo or Playas del Coco. Drop ideas and quotes in the notes.", hotel:null, img:null, cap:"To be decided", tags:["Open","On the way north"], drive:"Pick a spot that splits the drive to Costa Elena.", trackable:true },
@@ -204,8 +204,9 @@ let closed = new Set();
 try { closed = new Set(JSON.parse(sessionStorage.getItem(KEY+"-closed")||"[]")); } catch(e){}
 const isOpen = id => !closed.has(id);
 if(state.intercontinental && state.intercontinental.price==="1126") state.intercontinental.price="1220";
+if(state.savegre && !state.savegre.booked && !state.savegre.price){ state.savegre.booked=true; state.savegre.price="2177"; if(!state.savegre.notes) state.savegre.notes="Booking.com confirmation 5738425501"; }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
-function get(id){ if(!state[id]){ const l=LEGS.find(x=>x.id===id); state[id]={booked:false, price:(l&&l.defaultPrice)?String(l.defaultPrice):"", notes:""}; } return state[id]; }
+function get(id){ if(!state[id]){ const l=LEGS.find(x=>x.id===id); state[id]={booked:!!(l&&l.defaultBooked), price:(l&&l.defaultPrice)?String(l.defaultPrice):"", notes:(l&&l.defaultNotes)||""}; } return state[id]; }
 function money(n){ return "$"+n.toLocaleString("en-US",{maximumFractionDigits:0}); }
 const pad = n => String(n).padStart(2,"0");
 const plus = '<span class="circle"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>';
@@ -230,7 +231,7 @@ function render(){
       <div class="row-c"><div><div class="row-b">
         <p class="desc">${leg.place}</p>
         ${leg.drive ? `<p class="drive">${leg.drive}</p>` : ""}
-        ${leg.hotel ? `<a class="reserve" href="${leg.hotel.url}" target="_blank" rel="noopener">${leg.links?"Booking.com offer, ":"Book "}${leg.hotel.name} ${arrow}</a>` : ""}
+        ${leg.hotel ? `<a class="reserve" href="${leg.hotel.url}" target="_blank" rel="noopener">${leg.links&&!leg.defaultBooked?"Booking.com offer, ":""}${leg.hotel.name} ${arrow}</a>` : ""}
         ${leg.img ? `<div class="fig">
           <img src="${leg.img}" alt="${leg.cap}" loading="lazy" ${fb}>
           <span class="pill tl"><span class="n">${pad(i+1)}</span>${leg.cap}</span>
