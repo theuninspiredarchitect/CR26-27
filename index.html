@@ -146,7 +146,7 @@
 
 <section class="hero fade">
   <h1 class="title"><em>Costa Rica</em><br>26/27</h1>
-  <p class="lead">Josef and Renate, three weeks from the cloud forest to the Pacific. 21 December to 12 January.</p>
+  <p class="lead">Josef and Renate, a month from the cloud forest to the Pacific. 21 December to 21 January.</p>
   <a class="link" href="#stays">Explore the stays</a>
   <div class="fig" style="margin-top:26px;aspect-ratio:4/5"><img src="img/savegre.jpg" alt="Quetzal in the Savegre valley" onerror="this.onerror=null;this.src='img/gen-savegre.jpg'"><span class="pill tl"><span class="n">02</span>Quetzal, Savegre valley</span></div>
   <div class="meter">
@@ -158,8 +158,8 @@
 
 <section id="stays" class="fade">
   <div class="eyebrow">Accommodation</div>
-  <h2 class="big">Eight stops, from the cloud forest to the Pacific</h2>
-  <p class="lead">Christmas at home in San José, quetzals in Copey, New Year in Escazú with the Portillo family, two open nights, a week on the beach in Guanacaste and a surf town finale. Tap the plus to fold a stop away. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
+  <h2 class="big">Nine stops, from the cloud forest to the Pacific</h2>
+  <p class="lead">Christmas at home in San José, quetzals in Copey, New Year in Escazú with the Portillo family, two open nights, a week on the beach in Guanacaste, a surf town finale and a last stretch of spontaneous trips from San José. Tap the plus to fold a stop away. Switch it to booked once the reservation is in and drop in the price, the budget adds itself up.</p>
   <div class="list" id="list"></div>
 </section>
 
@@ -193,7 +193,8 @@ const LEGS = [
   { id:"open", type:"open", from:"2 Jan", to:"4 Jan", nights:2, title:"Two nights, location open", place:"Still to decide. Somewhere on the way to Guanacaste would make the long drive on the 4th easier: Jacó or Herradura, Monteverde, or straight up to Tamarindo or Playas del Coco. Drop ideas and quotes in the notes.", hotel:null, img:null, cap:"To be decided", tags:["Open","On the way north"], drive:"Pick a spot that splits the drive to Costa Elena.", trackable:true },
   { id:"jw", type:"hotel", from:"4 Jan", to:"10 Jan", nights:6, title:"All inclusive in Guanacaste", place:"JW Marriott Costa Elena on Playa El Jobo, the brand's first all inclusive. Beachfront, the largest pool in Costa Rica, Family by JW program for the little one.", hotel:{name:"JW Marriott Costa Elena", url:"https://www.marriott.com/LIRCJ"}, img:"https://cache.marriott.com/is/image/marriotts7prod/jw-lircj-aerial-view-33879:Wide-Hor?wid=1600&fit=constrain", fallback:"img/gen-jw.jpg", cap:"JW Marriott Costa Elena", tags:["All inclusive","Beachfront","Kids program"], drive:"Around 5 hours from the Central Valley, less from wherever the 2 to 4 Jan stop ends up.", trackable:true },
   { id:"silvestre", type:"hotel", from:"10 Jan", to:"12 Jan", nights:2, title:"Surf town finale in Nosara", place:"Silvestre Nosara, nine residences steps from Playa Guiones with a rooftop pool and kitchens in every unit. Residences sleep 4 to 6, so one unit fits all of us.", hotel:{name:"Silvestre Nosara", url:"https://silvestre.cr"}, img:"img/silvestre.jpg", fallback:"img/gen-silvestre.jpg", cap:"Silvestre Nosara", tags:["Beach","Rooftop pool","Sleeps 4 to 6"], drive:"Around 3.5 hours south, last stretch on gravel. 4x4 recommended.", trackable:true },
-  { id:"flight", type:"flight", from:"12 Jan", to:"21 Jan", nights:0, title:"Flight back to Vienna", place:"Nosara to SJO is about 4.5 hours by car, or a short domestic hop to San José. Check whether the return leaves from SJO or LIR, Liberia is much closer.", hotel:null, img:"img/gen-flight.jpg", cap:"Vienna", tags:["Flight","Vienna until 21 Jan"], drive:null, trackable:true, isFlight:true }
+  { id:"sj3", type:"home", from:"12 Jan", to:"21 Jan", nights:9, title:"San José and spontaneous trips", place:"Back at home for the last stretch. Nothing fixed, day trips and short escapes as the mood takes us: Poás, Cartago, a coffee farm, a beach day.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Home","Day trips"], drive:"Nosara to San José is about 4.5 hours by car, or a short domestic hop.", trackable:false },
+  { id:"flight", type:"flight", from:"21 Jan", to:"Vienna", nights:0, title:"Flight back to Vienna", place:"Departure from SJO on the 21st.", hotel:null, img:"img/gen-flight.jpg", cap:"Vienna", tags:["Flight","SJO"], drive:null, trackable:true, isFlight:true }
 ];
 
 const KEY = "cr-trip-2026-v1";
@@ -287,7 +288,7 @@ function stats(){
 
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
 function copyPlan(){
-  let out = "Josef & Renate in Costa Rica, 21 Dec 2026 to 12 Jan 2027\n\n";
+  let out = "Josef & Renate in Costa Rica, 21 Dec 2026 to 21 Jan 2027\n\n";
   LEGS.forEach(l => {
     const s = get(l.id);
     out += `${l.from} to ${l.to}: ${l.title}`;
