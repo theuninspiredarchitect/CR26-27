@@ -198,10 +198,10 @@
     <div class="rows" style="margin-top:14px"><span>Unterkünfte und Flüge</span><span id="sumStay">0 USD</span><span>Essen, Schätzung</span><span id="sumFood">0 USD</span></div>
   </div>
   <div class="card" style="margin-top:10px">
-    <div class="for">pro Familie, jeweils die Hälfte</div>
-    <h3>Josef & Renate · Matt, Rhina & die Kleine</h3>
+    <div class="for">die Hälfte vom Gesamtbetrag</div>
+    <h3>Pro Familie</h3>
     <div class="total sm" id="famJR">0 USD</div>
-    <p style="margin-top:8px">Alles wird halbe halbe geteilt: Unterkünfte, Flüge und die Essensschätzung.</p>
+    
     <span id="famUS" hidden></span>
   </div>
   <div class="card" style="margin-top:10px">
@@ -360,7 +360,7 @@ function copyPlan(){
     out += "\n\n";
   });
   let jr=0,us=0; LEGS.forEach(l=>{const x=shares(l); jr+=x.jr; us+=x.us;});
-  out += `Gesamt: ${money(jr+us)}\nPro Familie, je die Hälfte: ${money(jr)}`;
+  out += `Gesamt: ${money(jr+us)}\nPro Familie: ${money(jr)}`;
   navigator.clipboard.writeText(out).then(()=>toast("Kopiert")).catch(()=>toast("Kopieren vom Browser blockiert"));
 }
 document.getElementById("copyBtn").addEventListener("click", copyPlan);
