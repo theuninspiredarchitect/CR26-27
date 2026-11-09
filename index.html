@@ -157,6 +157,20 @@
   .card p{color:var(--mute);font-size:13px;line-height:1.65}
   .card .rows{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:13px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
   .card .rows span:nth-child(even){font-weight:600}
+  .tbl-wrap{margin:0 -20px;overflow-x:auto}
+  .btable{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;min-width:420px}
+  .btable th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600;text-align:right;padding:0 12px 10px;border-bottom:1px solid var(--line)}
+  .btable th:first-child,.btable td:first-child{text-align:left;padding-left:20px}
+  .btable th:last-child,.btable td:last-child{padding-right:20px}
+  .btable td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap;color:var(--mute)}
+  .btable td:first-child{white-space:normal;color:var(--ink)}
+  .btable td b{color:var(--ink);font-weight:600}
+  .btable tbody tr:nth-child(even) td{background:rgba(242,239,231,.6)}
+  .btable .tn{display:block;font-weight:500}
+  .btable .td{display:block;font-size:11px;color:var(--mute);margin-top:2px}
+  .btable tfoot td{border-bottom:0;border-top:2px solid var(--ink);padding-top:12px;color:var(--ink);font-weight:600}
+  .btable tfoot tr.half td{border-top:0;padding-top:4px;color:var(--mute);font-weight:500}
+  .btable tfoot tr.half td b{color:var(--ink)}
   .card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
   .card .icon{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:18px}
   .actions{display:flex;gap:8px;margin-top:16px}
@@ -224,9 +238,9 @@
     <span id="famUS" hidden></span>
   </div>
   <div class="card" style="margin-top:10px">
-    <div class="for">pro Station</div>
-    <div class="rows" id="rows" style="margin-top:0;padding-top:0;border-top:0"></div>
-    <div class="foot"><span style="font-size:11px;color:var(--mute)">Preise in USD</span><span class="icon">🌴</span></div>
+    <div class="for">pro Station, in USD</div>
+    <div class="tbl-wrap"><table class="btable"><thead><tr><th>Station</th><th>Unterkunft</th><th>Essen</th><th>Gesamt</th></tr></thead><tbody id="rows"></tbody><tfoot id="rowsFoot"></tfoot></table></div>
+    
   </div>
   <div class="actions">
     <button class="btn" id="copyBtn">Plan als Text kopieren</button>
@@ -363,7 +377,9 @@ function stats(){
   document.getElementById("sumFood").textContent = money(food);
   document.getElementById("famJR").textContent = money(jr);
   document.getElementById("famUS").textContent = money(us);
-  document.getElementById("rows").innerHTML = LEGS.filter(l=>shares(l).tot>0).map(l=>{ const x=shares(l); return `<span>${l.hotel?l.hotel.name:l.title}<small>${x.stay&&x.food?` · Unterkunft ${money(x.stay)}, Essen ${money(x.food)}`:x.food?" · Essen":""}</small></span><span>${money(x.tot)}</span>`; }).join("");
+  const fmt = n => n ? n.toLocaleString("de-AT",{maximumFractionDigits:0}) : "·";
+  document.getElementById("rows").innerHTML = LEGS.filter(l=>shares(l).tot>0).map(l=>{ const x=shares(l); return `<tr><td><span class="tn">${l.hotel?l.hotel.name:l.title}</span><span class="td">${l.from} bis ${l.to}</span></td><td>${fmt(x.stay)}</td><td>${fmt(x.food)}</td><td><b>${fmt(x.tot)}</b></td></tr>`; }).join("");
+  document.getElementById("rowsFoot").innerHTML = `<tr><td>Gesamt</td><td>${fmt(stay)}</td><td>${fmt(food)}</td><td><b>${fmt(total)}</b></td></tr><tr class="half"><td>Pro Familie</td><td>${fmt(stay/2)}</td><td>${fmt(food/2)}</td><td><b>${fmt(total/2)}</b></td></tr>`;
 }
 
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
