@@ -191,17 +191,20 @@
 
 <section id="budget" class="fade">
   <div class="eyebrow">Budget</div>
-  <h2 class="big">Was die Reise kostet, pro Familie</h2>
+  <h2 class="big">Was die Reise kostet</h2>
   <div class="card">
     <div class="for">für die ganze Reise</div>
     <h3>Gesamt</h3>
     <div class="total" id="bigTotal">0 USD</div>
-    <p>Unterkünfte plus Essensschätzung, aufgeteilt nach dem, was bei jeder Station eingestellt ist. Alles wird nur in diesem Browser gespeichert.</p>
+    <p>Unterkünfte plus Essensschätzung für alle fünf. Alles wird nur in diesem Browser gespeichert.</p>
     <div class="rows" style="margin-top:14px"><span>Unterkünfte und Flüge</span><span id="sumStay">0 USD</span><span>Essen, Schätzung</span><span id="sumFood">0 USD</span></div>
   </div>
-  <div class="fam">
-    <div class="card"><div class="for">Familie 1</div><h3>Josef & Renate</h3><div class="total sm" id="famJR">0 USD</div></div>
-    <div class="card"><div class="for">Familie 2</div><h3>Matt, Rhina & die Kleine</h3><div class="total sm" id="famUS">0 USD</div></div>
+  <div class="card" style="margin-top:10px">
+    <div class="for">pro Familie, jeweils die Hälfte</div>
+    <h3>Josef & Renate · Matt, Rhina & die Kleine</h3>
+    <div class="total sm" id="famJR">0 USD</div>
+    <p style="margin-top:8px">Alles wird halbe halbe geteilt: Unterkünfte, Flüge und die Essensschätzung.</p>
+    <span id="famUS" hidden></span>
   </div>
   <div class="card" style="margin-top:10px">
     <div class="for">pro Station</div>
@@ -293,11 +296,7 @@ function render(){
             <div class="price"><label>${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>
           </div>` : ""}
           ${leg.isFlight ? "" : `<div class="ctl-top" style="margin-top:${leg.trackable?"10px":"0"}">
-            <div class="split"><label>Aufteilung</label><select data-id="${leg.id}" data-k="split">
-              <option value="half" ${s.split==="half"?"selected":""}>50 / 50</option>
-              <option value="jr" ${s.split==="jr"?"selected":""}>Josef & Renate</option>
-              <option value="us" ${s.split==="us"?"selected":""}>Matt, Rhina & Kleine</option>
-            </select></div>
+            
             <div class="price"><label>Essen, Schätzung</label><div class="in"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>
           </div>`}
           ${leg.trackable ? `<textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea>` : ""}
@@ -317,7 +316,6 @@ list.addEventListener("click", e => {
 });
 list.addEventListener("change", e => {
   const t = e.target; if(!t.dataset.id) return;
-  if(t.dataset.k==="split"){ get(t.dataset.id).split = t.value; save(); stats(); return; }
   if(t.dataset.k!=="booked") return;
   const s = get(t.dataset.id); s.booked = t.checked; save();
   const row = t.closest(".row"); row.classList.toggle("booked", s.booked);
@@ -336,7 +334,7 @@ list.addEventListener("input", e => {
 
 const num = v => parseFloat(v)||0;
 function shares(l){ const st=get(l.id); const stay=num(st.price), food=num(st.food); const tot=stay+food;
-  const f = st.split==="jr" ? [tot,0] : st.split==="us" ? [0,tot] : [tot/2,tot/2]; return {stay,food,tot,jr:f[0],us:f[1]}; }
+  return {stay,food,tot,jr:tot/2,us:tot/2}; }
 function stats(){
   const tr = LEGS.filter(l=>l.trackable);
   const booked = tr.filter(l=>get(l.id).booked).length;
@@ -353,7 +351,7 @@ function stats(){
   document.getElementById("sumFood").textContent = money(food);
   document.getElementById("famJR").textContent = money(jr);
   document.getElementById("famUS").textContent = money(us);
-  document.getElementById("rows").innerHTML = LEGS.filter(l=>shares(l).tot>0).map(l=>{ const x=shares(l); const who = get(l.id).split==="jr"?"J & R":get(l.id).split==="us"?"wir":"50/50"; return `<span>${l.hotel?l.hotel.name:l.title}<small> · ${who}${x.food?`, Essen ${money(x.food)}`:""}</small></span><span>${money(x.tot)}</span>`; }).join("");
+  document.getElementById("rows").innerHTML = LEGS.filter(l=>shares(l).tot>0).map(l=>{ const x=shares(l); return `<span>${l.hotel?l.hotel.name:l.title}<small>${x.stay&&x.food?` · Unterkunft ${money(x.stay)}, Essen ${money(x.food)}`:x.food?" · Essen":""}</small></span><span>${money(x.tot)}</span>`; }).join("");
 }
 
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
@@ -365,11 +363,11 @@ function copyPlan(){
     if(l.hotel) out += `\n  ${l.hotel.name} (${l.hotel.url})`;
     if(l.details) l.details.forEach(([k,v])=>{ out += `\n  ${k}: ${v}`; });
     if(l.trackable) out += `\n  ${s.booked?"GEBUCHT":"nicht gebucht"}${s.price?`, Unterkunft $${s.price}`:""}${s.notes?`, ${s.notes}`:""}`;
-    if(!l.isFlight) out += `\n  Essen geschätzt $${s.food||0}, Aufteilung ${s.split==="jr"?"Josef & Renate":s.split==="us"?"Matt, Rhina & Kleine":"50/50"}`;
+    if(!l.isFlight && s.food) out += `\n  Essen geschätzt $${s.food}`;
     out += "\n\n";
   });
   let jr=0,us=0; LEGS.forEach(l=>{const x=shares(l); jr+=x.jr; us+=x.us;});
-  out += `Gesamt: ${money(jr+us)}\nJosef & Renate: ${money(jr)}\nMatt, Rhina & Kleine: ${money(us)}`;
+  out += `Gesamt: ${money(jr+us)}\nPro Familie, je die Hälfte: ${money(jr)}`;
   navigator.clipboard.writeText(out).then(()=>toast("Kopiert")).catch(()=>toast("Kopieren vom Browser blockiert"));
 }
 document.getElementById("copyBtn").addEventListener("click", copyPlan);
