@@ -94,7 +94,8 @@
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
   .chip{font-size:11px;font-weight:500;padding:6px 10px;border-radius:999px;border:1px solid var(--ink);color:var(--ink);opacity:.8}
 
-  .details{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13px;margin-bottom:18px;padding:14px 16px;background:#fff;border-radius:14px}
+  .details{display:grid;grid-template-columns:minmax(120px,auto) 1fr;gap:10px 16px;font-size:13px;margin-bottom:18px;padding:14px 16px;background:#fff;border-radius:14px}
+  @media(max-width:480px){.details{grid-template-columns:1fr;gap:2px}.details dt{margin-top:10px}.details dt:first-child{margin-top:0}}
   .details dt{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:600;padding-top:3px}
   .details dd{margin:0;font-weight:500;word-break:break-word}
   .details dd.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;letter-spacing:.06em}
@@ -110,32 +111,24 @@
   .todo ul{list-style:none;padding:0 0 14px}
   .todo li{font-size:13px;color:var(--mute);line-height:1.55;padding:5px 0 5px 16px;position:relative}
   .todo li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:50%;background:var(--lime)}
-  .ctl{background:#fff;border-radius:var(--r);padding:14px}
-  .ctl-top{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
-  .ctl-top+.ctl-top{margin-top:10px!important;padding-top:10px;border-top:1px solid var(--line)}
-  .ctl-top:empty{display:none}
+  .ctl{background:#fff;border-radius:var(--r);padding:6px 14px}
+  .crow{display:grid;grid-template-columns:1fr 140px;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .crow:last-child{border-bottom:0}
+  .crow:has(.tog),.crow:has(textarea){grid-template-columns:1fr}
+  .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
   .tog{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;cursor:pointer;user-select:none}
   .tog input{display:none}
-  .tog .sw{width:40px;height:24px;border-radius:999px;background:#D6D2C6;position:relative;transition:background .25s}
+  .tog .sw{width:40px;height:24px;border-radius:999px;background:#D6D2C6;position:relative;transition:background .25s;flex:none}
   .tog .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s var(--ease);box-shadow:0 1px 3px rgba(0,0,0,.15)}
   .tog.on .sw{background:var(--lime)}
   .tog.on .sw::after{transform:translateX(16px)}
-  .price{display:grid;grid-template-columns:1fr 150px;align-items:center;gap:12px;justify-self:stretch;grid-column:1/-1}
-  .ctl-top:has(.tog) .price{grid-column:auto;grid-template-columns:auto 150px}
-  .price .in{width:150px}
-  .split{display:inline-flex;align-items:center;gap:8px}
-  .split label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
-  .split select{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:var(--bg);border:1px solid transparent;border-radius:10px;padding:8px 10px;outline:0}
-  .split select:focus{border-color:var(--ink)}
-  .price label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600;text-align:right}
-  .ctl-top:not(:has(.tog)) .price label{text-align:left}
-  .price .in{display:flex;align-items:center;box-sizing:border-box;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s}
-  .price .in:focus-within{border-color:var(--ink)}
-  .price .in span{color:var(--mute);font-size:13px}
-  .price input{border:0;outline:0;width:100%;min-width:0;padding:8px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
-  .ctl textarea{width:100%;margin-top:12px;border:1px solid transparent;border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;background:var(--bg);resize:vertical;min-height:40px;color:var(--ink);transition:border-color .2s}
+  .in{display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s;width:140px;box-sizing:border-box}
+  .in:focus-within{border-color:var(--ink)}
+  .in span{color:var(--mute);font-size:13px}
+  .in input{border:0;outline:0;width:100%;min-width:0;padding:9px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
+  .ctl textarea{width:100%;border:1px solid transparent;border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;background:var(--bg);resize:vertical;min-height:40px;color:var(--ink);transition:border-color .2s}
   .ctl textarea:focus{outline:0;border-color:var(--ink)}
-  .ctl textarea::placeholder,.price input::placeholder{color:var(--soft)}
+  .ctl textarea::placeholder,.in input::placeholder{color:var(--soft)}
 
   /* budget card */
   .card{background:#fff;border-radius:22px;padding:22px 20px;margin-top:26px}
@@ -296,15 +289,10 @@ function render(){
         ${leg.todo ? `<div class="todo">${leg.todo.map(([h,...items])=>`<details><summary>${h}${plus}</summary><ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul></details>`).join("")}</div>` : ""}
         ${leg.details ? `<dl class="details">${leg.details.map(([k,v])=>`<dt>${k}</dt><dd class="${/^(Buchungsnummer|PIN)$/.test(k)&&v!=="ausstehend"?"code":""}">${v}</dd>`).join("")}</dl>` : ""}
         <div class="ctl">
-          ${leg.trackable ? `<div class="ctl-top">
-            <label class="tog ${s.booked?"on":""}"><input type="checkbox" data-id="${leg.id}" data-k="booked" ${s.booked?"checked":""}><span class="sw"></span>${s.booked?"Gebucht":"Noch nicht gebucht"}</label>
-            <div class="price"><label>${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>
-          </div>` : ""}
-          ${leg.isFlight ? "" : `<div class="ctl-top" style="margin-top:${leg.trackable?"10px":"0"}">
-            
-            <div class="price"><label>Essen, Schätzung</label><div class="in"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>
-          </div>`}
-          ${leg.trackable ? `<textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea>` : ""}
+          ${leg.trackable ? `<div class="crow"><label class="tog ${s.booked?"on":""}"><input type="checkbox" data-id="${leg.id}" data-k="booked" ${s.booked?"checked":""}><span class="sw"></span>${s.booked?"Gebucht":"Noch nicht gebucht"}</label></div>` : ""}
+          ${leg.trackable ? `<div class="crow"><label class="lbl">${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>` : ""}
+          ${leg.isFlight ? "" : `<div class="crow"><label class="lbl">Essen, Schätzung</label><div class="in"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>`}
+          ${leg.trackable ? `<div class="crow"><textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea></div>` : ""}
         </div>
       </div></div></div>`;
     list.appendChild(row);
