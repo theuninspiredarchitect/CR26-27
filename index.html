@@ -269,6 +269,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
+if("scrollRestoration" in history) history.scrollRestoration="manual";
+if(!location.hash){ window.scrollTo(0,0); window.addEventListener("load",()=>window.scrollTo(0,0)); window.addEventListener("pageshow",()=>window.scrollTo(0,0)); }
 const LEGS = [
   { id:"sj1", type:"home", from:"21. Dez", to:"25. Dez", nights:4, foodDefault:300, title:"Weihnachten in San José", place:"Zuhause in San Pedro. Josef und Renate landen am 21. am SJO, Heiligabend feiern wir daheim.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Zuhause","Heiligabend"], drive:"Abholung am Flughafen SJO am 21.", trackable:false,
     todo:[["Zuhause","Heiligabend daheim, gern österreichisch, wenn Josef und Renate kochen wollen","Tope Nacional, die große Reiterparade am 26. Dezember auf dem Paseo Colón, sehr tico","Fiestas de Zapote, 25. Dezember bis Anfang Jänner: Kirmes, Stierarena, Chicharrones","Weihnachtsbeleuchtung in der Innenstadt und in den Parks"],["Rund um San José","Vulkan Poás mit Krater und La Paz Waterfall Gardens, einfacher Tagesausflug","Vulkan Irazú und die Basilika in Cartago, kühler Hochlandvormittag","Kaffeefarm Doka oder Hacienda Alsacia in Alajuela","Abendessen im Barrio Escalante, mittags ein Casado im Mercado Central","Teatro Nacional und Jade oder Goldmuseum, falls es regnet"],["Für Chloe","Museo de los Niños in der alten Festung, Mitmachmuseum, perfekt für einen Regentag","Parque Diversiones in La Uruca, Freizeitpark mit Kinderbereich, Tickets online","Rescate Wildlife Rescue Center (Zoo Ave) in Alajuela, Faultiere, Tukane und Affen aus nächster Nähe","Parque La Sabana, Spielplätze und Enten füttern am See","Spirogyra Schmetterlingsgarten in Barrio Amón"]] },
