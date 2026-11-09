@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Reise Costa Rica 26/27 · Josef & Renate</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,8 +13,8 @@
     --r:18px; --ease:cubic-bezier(.22,.68,0,1.1);
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55;font-size:15px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{touch-action:pan-y;overscroll-behavior-y:none;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55;font-size:15px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
   a{color:inherit;text-decoration:none}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   .wrap{max-width:560px;margin:0 auto;padding:0 24px}
@@ -119,6 +119,10 @@
   .tog.on .sw{background:var(--lime)}
   .tog.on .sw::after{transform:translateX(16px)}
   .price{display:inline-flex;align-items:center;gap:8px}
+  .split{display:inline-flex;align-items:center;gap:8px}
+  .split label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
+  .split select{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:var(--bg);border:1px solid transparent;border-radius:10px;padding:8px 10px;outline:0}
+  .split select:focus{border-color:var(--ink)}
   .price label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
   .price .in{display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s}
   .price .in:focus-within{border-color:var(--ink)}
@@ -132,6 +136,12 @@
   .card{background:#fff;border-radius:22px;padding:22px 20px;margin-top:26px}
   .card .for{font-size:10px;color:var(--mute);letter-spacing:.06em;margin-bottom:34px}
   .card h3{font-size:17px;font-weight:500;margin-bottom:8px}
+  .fam{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+  .fam .card{margin-top:0;padding:18px 16px}
+  .fam .for{margin-bottom:14px}
+  .fam h3{font-size:14px}
+  .card .total.sm{font-size:28px;margin-bottom:0}
+  .card .rows small{color:var(--mute);font-weight:400}
   .card .total{font-size:40px;font-weight:500;letter-spacing:-.03em;line-height:1;margin-bottom:12px}
   .card p{color:var(--mute);font-size:13px;line-height:1.65}
   .card .rows{display:grid;grid-template-columns:1fr auto;gap:10px 16px;font-size:13px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
@@ -181,13 +191,21 @@
 
 <section id="budget" class="fade">
   <div class="eyebrow">Budget</div>
-  <h2 class="big">Was die Reise bisher kostet</h2>
+  <h2 class="big">Was die Reise kostet, pro Familie</h2>
   <div class="card">
     <div class="for">für die ganze Reise</div>
-    <h3>Zwischensumme</h3>
+    <h3>Gesamt</h3>
     <div class="total" id="bigTotal">0 USD</div>
-    <p>Summe aller oben eingetragenen Preise, Hotels plus Rückflug. Alles wird nur in diesem Browser gespeichert.</p>
-    <div class="rows" id="rows"></div>
+    <p>Unterkünfte plus Essensschätzung, aufgeteilt nach dem, was bei jeder Station eingestellt ist. Alles wird nur in diesem Browser gespeichert.</p>
+    <div class="rows" style="margin-top:14px"><span>Unterkünfte und Flüge</span><span id="sumStay">0 USD</span><span>Essen, Schätzung</span><span id="sumFood">0 USD</span></div>
+  </div>
+  <div class="fam">
+    <div class="card"><div class="for">Familie 1</div><h3>Josef & Renate</h3><div class="total sm" id="famJR">0 USD</div></div>
+    <div class="card"><div class="for">Familie 2</div><h3>Matt, Rhina & die Kleine</h3><div class="total sm" id="famUS">0 USD</div></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div class="for">pro Station</div>
+    <div class="rows" id="rows" style="margin-top:0;padding-top:0;border-top:0"></div>
     <div class="foot"><span style="font-size:11px;color:var(--mute)">Preise in USD</span><span class="icon">🌴</span></div>
   </div>
   <div class="actions">
@@ -202,25 +220,25 @@
 
 <script>
 const LEGS = [
-  { id:"sj1", type:"home", from:"21. Dez", to:"25. Dez", nights:4, title:"Weihnachten in San José", place:"Zuhause in San Pedro. Josef und Renate landen am 21. am SJO, Heiligabend feiern wir daheim.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Zuhause","Heiligabend"], drive:"Abholung am Flughafen SJO am 21.", trackable:false,
+  { id:"sj1", type:"home", from:"21. Dez", to:"25. Dez", nights:4, foodDefault:300, title:"Weihnachten in San José", place:"Zuhause in San Pedro. Josef und Renate landen am 21. am SJO, Heiligabend feiern wir daheim.", hotel:null, img:"img/gen-sj1.jpg", cap:"San José", tags:["Zuhause","Heiligabend"], drive:"Abholung am Flughafen SJO am 21.", trackable:false,
     todo:[["Zuhause","Heiligabend daheim, gern österreichisch, wenn Josef und Renate kochen wollen","Tope Nacional, die große Reiterparade am 26. Dezember auf dem Paseo Colón, sehr tico","Fiestas de Zapote, 25. Dezember bis Anfang Jänner: Kirmes, Stierarena, Chicharrones","Weihnachtsbeleuchtung in der Innenstadt und in den Parks"],["Rund um San José","Vulkan Poás mit Krater und La Paz Waterfall Gardens, einfacher Tagesausflug","Vulkan Irazú und die Basilika in Cartago, kühler Hochlandvormittag","Kaffeefarm Doka oder Hacienda Alsacia in Alajuela","Abendessen im Barrio Escalante, mittags ein Casado im Mercado Central","Teatro Nacional und Jade oder Goldmuseum, falls es regnet"],["Für die Kleine","Museo de los Niños in der alten Festung, Mitmachmuseum, perfekt für einen Regentag","Parque Diversiones in La Uruca, Freizeitpark mit Kinderbereich, Tickets online","Rescate Wildlife Rescue Center (Zoo Ave) in Alajuela, Faultiere, Tukane und Affen aus nächster Nähe","Parque La Sabana, Spielplätze und Enten füttern am See","Spirogyra Schmetterlingsgarten in Barrio Amón"]] },
-  { id:"savegre", type:"hotel", from:"25. Dez", to:"28. Dez", nights:3, title:"Nebelwald in Copey", place:"Hotel Savegre im Savegre Tal bei San Gerardo de Dota, einer der besten Orte im Land, um Quetzale zu sehen. Gebucht über Booking.com: 2 Zimmer für 3 Nächte, Frühstück inklusive, 2.177,05 USD gesamt, Zahlung im Hotel, kostenlos stornierbar bis 25. November 2026.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, links:[{label:"Booking.com", url:"https://secure.booking.com/myreservations.html"}], img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal im Savegre Tal", tags:["Quetzale","Spa","2 Zimmer","Frühstück inklusive"], drive:"Etwa 2 Stunden von San José über den Cerro de la Muerte. Warme Sachen einpacken, nachts wird es kalt.", trackable:true, defaultPrice:2177, defaultBooked:true, defaultNotes:"",
+  { id:"savegre", type:"hotel", from:"25. Dez", to:"28. Dez", nights:3, foodDefault:250, title:"Nebelwald in Copey", place:"Hotel Savegre im Savegre Tal bei San Gerardo de Dota, einer der besten Orte im Land, um Quetzale zu sehen. Gebucht über Booking.com: 2 Zimmer für 3 Nächte, Frühstück inklusive, 2.177,05 USD gesamt, Zahlung im Hotel, kostenlos stornierbar bis 25. November 2026.", hotel:{name:"Hotel Savegre", url:"https://www.savegre.com"}, links:[{label:"Booking.com", url:"https://secure.booking.com/myreservations.html"}], img:"img/savegre.jpg", fallback:"img/gen-savegre.jpg", cap:"Quetzal im Savegre Tal", tags:["Quetzale","Spa","2 Zimmer","Frühstück inklusive"], drive:"Etwa 2 Stunden von San José über den Cerro de la Muerte. Warme Sachen einpacken, nachts wird es kalt.", trackable:true, defaultPrice:2177, defaultBooked:true, defaultNotes:"",
     details:[["Buchungsnummer","5738425501"],["PIN","4433"],["Zimmer","2 Zimmer, 3 Nächte, Frühstück inklusive"],["Gesamt","2.177,05 USD, Zahlung im Hotel"],["Stornierung","Kostenlos bis 25. Nov 2026"],["Anreise","Ab 15:00, Abreise bis 12:00. Rezeption bis 21:00 besetzt, bei späterer Ankunft vorher anrufen"],["WhatsApp Hotel",'<a href="https://wa.me/message/IIE7H7KZYS67A1" target="_blank" rel="noopener">wa.me/message/IIE7H7KZYS67A1 ↗</a>'],["Gebucht über","Booking.com"]],
     todo:[["Im Hotel","Quetzal Tour im Morgengrauen mit Hotelguide, der Grund für den Aufenthalt, gleich am ersten Tag an der Rezeption buchen","Privates Reservat mit 400 ha und markierten Wegen, der Wasserfallweg dauert etwa 2 Stunden","Forellenfischen im Río Savegre, die Küche bereitet den Fang zu","Spa: Whirlpool, Sauna, Massagen, perfekt nach einem kalten Morgen","Kolibrigarten mit Futterstellen direkt beim Restaurant, toll für die Kleine"],["In der Umgebung","Nationalpark Los Quetzales, 15 Minuten die Straße hinauf","Miriam's Quetzals oder Batsú Garden für Kaffee und noch mehr Vögel","Kurze Fahrt hinauf auf den Cerro de la Muerte für den Páramo Blick an einem klaren Morgen","Apfel und Pfirsichplantagen entlang der Talstraße"],["Für die Kleine","Kolibris füttern beim Restaurant, die Vögel kommen auf Armlänge","Kurzer flacher Weg am Fluss, Forellen im klaren Wasser suchen","Forellen füttern am Zuchtbecken des Hotels, an der Rezeption fragen","Warme Schokolade am Kamin, abends wird es richtig kalt"]] },
-  { id:"sj2", type:"home", from:"28. Dez", to:"31. Dez", nights:3, title:"Zurück in San José", place:"Ein paar ruhige Tage daheim vor Silvester.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Zuhause"], drive:"Etwa 2 Stunden zurück aus den Bergen.", trackable:false,
+  { id:"sj2", type:"home", from:"28. Dez", to:"31. Dez", nights:3, foodDefault:200, title:"Zurück in San José", place:"Ein paar ruhige Tage daheim vor Silvester.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Zuhause"], drive:"Etwa 2 Stunden zurück aus den Bergen.", trackable:false,
     todo:[["Ideen","Wäsche und ein langsamer Tag, Silvester steht an","Kunsthandwerksmarkt in Moravia für Mitbringsel","Tagesausflug nach Sarchí zu den bemalten Ochsenkarren","Mittagessen in einer Soda in Santa Ana oder im Zentrum von Escazú"],["Für die Kleine","Spielplatz im Parque del Este oder Parque La Sabana","Kinderkino in Multiplaza oder Lincoln Plaza"]] },
-  { id:"intercontinental", type:"hotel", from:"31. Dez", to:"2. Jän", nights:2, title:"Silvester in Escazú", place:"Real InterContinental bei Multiplaza, Escazú. Silvesterparty mit der Familie Portillo, drei Pools und das größte Spa Mittelamerikas zum Erholen am 1. Jänner. Buchung über Booking.com: 2 x Classic King Room mit Poolblick, 1.220,40 USD für zwei Nächte inklusive 13 % Steuer, Zahlung im Hotel, kostenlos stornierbar bis 29. Dezember 2026.", hotel:{name:"InterContinental Costa Rica", url:"https://www.booking.com/hotel/cr/real-intercontinental.de.html?checkin=2026-12-31&checkout=2027-01-02&group_adults=4&group_children=1&age=3&no_rooms=2"}, links:[{label:"Hotelseite", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}], img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["Silvester","Familie Portillo","2 x King Poolblick","Stornierbar bis 29. Dez"], drive:"20 Minuten von zuhause.", trackable:true, defaultPrice:1220,
+  { id:"intercontinental", type:"hotel", from:"31. Dez", to:"2. Jän", nights:2, foodDefault:350, title:"Silvester in Escazú", place:"Real InterContinental bei Multiplaza, Escazú. Silvesterparty mit der Familie Portillo, drei Pools und das größte Spa Mittelamerikas zum Erholen am 1. Jänner. Buchung über Booking.com: 2 x Classic King Room mit Poolblick, 1.220,40 USD für zwei Nächte inklusive 13 % Steuer, Zahlung im Hotel, kostenlos stornierbar bis 29. Dezember 2026.", hotel:{name:"InterContinental Costa Rica", url:"https://www.booking.com/hotel/cr/real-intercontinental.de.html?checkin=2026-12-31&checkout=2027-01-02&group_adults=4&group_children=1&age=3&no_rooms=2"}, links:[{label:"Hotelseite", url:"https://www.ihg.com/intercontinental/hotels/us/en/san-jose/sjoha/hoteldetail"}], img:"img/intercontinental.jpg", cap:"InterContinental Escazú", tags:["Silvester","Familie Portillo","2 x King Poolblick","Stornierbar bis 29. Dez"], drive:"20 Minuten von zuhause.", trackable:true, defaultPrice:1220,
     details:[["Zimmer","2 x Classic King Room mit Poolblick"],["Gesamt","1.220,40 USD inkl. 13 % Steuer, Zahlung im Hotel"],["Stornierung","Kostenlos bis 29. Dez 2026"],["Buchungsnummer","ausstehend"],["Gebucht über","Booking.com"]],
     todo:[["Im Hotel","Silvester Galadinner und Party, Tisch früh reservieren","Drei Außenpools plus Kinderpool","Spa InterContinental, das größte Stadtspa Mittelamerikas, Behandlungen für den 1. Jänner buchen","Club Lounge, falls die Zimmer sie einschließen: Frühstück, Snacks am Nachmittag, Drinks am Abend"],["Rund um Escazú","Multiplaza gleich nebenan, Eis und Kino für die Kleine","Avenida Escazú zum Essen und für Drinks","Wanderung auf den Pico Blanco oder Cerro San Miguel mit Blick über das Zentraltal","Neujahrsbrunch im Hotel Alta oder in Santa Ana"],["Für die Kleine","Kinderpool im Hotel, Schwimmflügel mitnehmen","Spielzone und Kinderkino in Multiplaza gleich nebenan","Silvester: beim Galadinner nach Kindermenü und Kinderbetreuung fragen, das Hotel vermittelt Babysitter","Neujahrsbrunch mit Kinderbuffet im Hotel nachfragen"]] },
-  { id:"open", type:"open", from:"2. Jän", to:"4. Jän", nights:2, title:"Zwei Nächte, Ort noch offen", place:"Noch zu entscheiden. Etwas auf dem Weg nach Guanacaste würde die lange Fahrt am 4. entspannen: Jacó oder Herradura, Monteverde, oder gleich hinauf nach Tamarindo oder Playas del Coco. Ideen und Preise in die Notizen.", hotel:null, img:null, cap:"Noch offen", tags:["Offen","Auf dem Weg nach Norden"], drive:"Einen Ort wählen, der die Fahrt nach Costa Elena teilt.", trackable:true,
+  { id:"open", type:"open", from:"2. Jän", to:"4. Jän", nights:2, foodDefault:250, title:"Zwei Nächte, Ort noch offen", place:"Noch zu entscheiden. Etwas auf dem Weg nach Guanacaste würde die lange Fahrt am 4. entspannen: Jacó oder Herradura, Monteverde, oder gleich hinauf nach Tamarindo oder Playas del Coco. Ideen und Preise in die Notizen.", hotel:null, img:null, cap:"Noch offen", tags:["Offen","Auf dem Weg nach Norden"], drive:"Einen Ort wählen, der die Fahrt nach Costa Elena teilt.", trackable:true,
     todo:[["Falls Jacó oder Herradura","Spaziergang im Nationalpark Carara, Aras und Krokodile an der Tárcoles Brücke","Rainforest Adventures Seilbahn durch den Regenwald","Strandnachmittag an der Playa Herradura oder Hermosa für Surfer"],["Falls Monteverde","Hängebrücken und das Nebelwaldreservat","Nachtwanderung zu Faultieren und Fröschen","Kaffee und Schokoladentour"],["Falls direkt nach Guanacaste","Tamarindo oder Playas del Coco für eine Strandnacht","Rincón de la Vieja, heiße Quellen und Schlammbäder auf dem Weg nach Norden"],["Für die Kleine","Jacó: Rainforest Adventures Seilbahn, ruhig und sicher für kleine Kinder, Tickets online","Jacó: Pura Vida Gardens Wasserfälle, kurzer Spaziergang","Monteverde: Schmetterlingsgarten und Froschteich, Selvatura Hängebrücken sind kinderwagentauglich","Guanacaste: Diamante Eco Adventure Park, Tierpark und Strand"]] },
-  { id:"jw", type:"hotel", from:"4. Jän", to:"10. Jän", nights:6, title:"All Inclusive Woche in Guanacaste", place:"JW Marriott Costa Elena an der Playa El Jobo, das erste All Inclusive der Marke. Direkt am Strand, der größte Pool Costa Ricas, Family by JW Programm für die Kleine.", hotel:{name:"JW Marriott Costa Elena", url:"https://www.marriott.com/LIRCJ"}, img:"https://cache.marriott.com/is/image/marriotts7prod/jw-lircj-aerial-view-33879:Wide-Hor?wid=1600&fit=constrain", fallback:"img/gen-jw.jpg", cap:"JW Marriott Costa Elena", tags:["All Inclusive","Direkt am Strand","Kinderprogramm"], drive:"Rund 5 Stunden aus dem Zentraltal, weniger je nachdem, wo der Stopp vom 2. bis 4. Jänner landet.", trackable:true,
+  { id:"jw", type:"hotel", from:"4. Jän", to:"10. Jän", nights:6, foodDefault:150, title:"All Inclusive Woche in Guanacaste", place:"JW Marriott Costa Elena an der Playa El Jobo, das erste All Inclusive der Marke. Direkt am Strand, der größte Pool Costa Ricas, Family by JW Programm für die Kleine.", hotel:{name:"JW Marriott Costa Elena", url:"https://www.marriott.com/LIRCJ"}, img:"https://cache.marriott.com/is/image/marriotts7prod/jw-lircj-aerial-view-33879:Wide-Hor?wid=1600&fit=constrain", fallback:"img/gen-jw.jpg", cap:"JW Marriott Costa Elena", tags:["All Inclusive","Direkt am Strand","Kinderprogramm"], drive:"Rund 5 Stunden aus dem Zentraltal, weniger je nachdem, wo der Stopp vom 2. bis 4. Jänner landet.", trackable:true,
     todo:[["Im Resort","Der Pool, der größte in Costa Rica, plus ruhiger Bereich nur für Erwachsene","Family by JW Kinderclub mit Tagesprogramm, Kleine abgeben und ab ins Spa","Spa by JW, früh für die Woche buchen","Restaurant Leal mit Sieben Gänge Menü, einen Abend für die vier Erwachsenen reservieren","Wöchentlicher Nachtmarkt mit lokalem Handwerk, Essen und Musik","Kajaks, Stand up Paddle und Schnorcheln vor dem Strand inklusive","Sonnenuntergangswanderung auf den Resortwegen"],["Rund um Costa Elena","Bahía Salinas, Kitesurf Bucht 20 Minuten entfernt, ruhiges Wasser für die Kleine","Nationalpark Santa Rosa und die historische Hacienda La Casona","Vulkan Rincón de la Vieja, heiße Quellen und Wasserfälle, etwa 1,5 Stunden","Bootsausflug zum Vogelschutzgebiet Isla Bolaños","Aussichtspunkt La Cruz bei Sonnenuntergang über der Bucht"],["Für die Kleine","Family by JW Kinderclub mit Tagesprogramm, offiziell meist ab 4 Jahren, bei 3 Jahren mit Begleitperson, beim Concierge vorab anmelden","Kinderpool und flacher Strandbereich in der Bucht","Family Kochkurs oder Pizzabacken im Resort, Termine beim Concierge erfragen","Nachtmarkt mit Musik und Tanz, Kinder lieben es","Bahía Salinas, flaches warmes Wasser zum Planschen"]] },
-  { id:"silvestre", type:"hotel", from:"10. Jän", to:"12. Jän", nights:2, title:"Surfer Finale in Nosara", place:"Silvestre Nosara, neun Residenzen wenige Schritte von der Playa Guiones, Dachpool und Küche in jeder Einheit. Die Residenzen schlafen 4 bis 6, eine Einheit reicht für uns alle.", hotel:{name:"Silvestre Nosara", url:"https://silvestre.cr"}, img:"img/silvestre.jpg", fallback:"img/gen-silvestre.jpg", cap:"Silvestre Nosara", tags:["Strand","Dachpool","Schläft 4 bis 6"], drive:"Rund 3,5 Stunden nach Süden, das letzte Stück auf Schotter. 4x4 empfohlen.", trackable:true,
+  { id:"silvestre", type:"hotel", from:"10. Jän", to:"12. Jän", nights:2, foodDefault:350, title:"Surfer Finale in Nosara", place:"Silvestre Nosara, neun Residenzen wenige Schritte von der Playa Guiones, Dachpool und Küche in jeder Einheit. Die Residenzen schlafen 4 bis 6, eine Einheit reicht für uns alle.", hotel:{name:"Silvestre Nosara", url:"https://silvestre.cr"}, img:"img/silvestre.jpg", fallback:"img/gen-silvestre.jpg", cap:"Silvestre Nosara", tags:["Strand","Dachpool","Schläft 4 bis 6"], drive:"Rund 3,5 Stunden nach Süden, das letzte Stück auf Schotter. 4x4 empfohlen.", trackable:true,
     todo:[["Im Hotel","Dachpool mit Meerblick, Drinks zum Sonnenuntergang","Surfkurs an der Guiones, vom Hotel organisiert","Yogastunde am Morgen, eine pro Tag inklusive","Küchen in den Residenzen, Familienfrühstück oder Abendessen daheim"],["Rund um Nosara","Playa Guiones, langer Sandstrand, bei Ebbe sicher für Kinder","Gezeitenbecken an der Playa Pelada und das Blasloch bei Sonnenuntergang","Schutzgebiet Ostional, Schildkröten nisten das ganze Jahr, Arribadas vor allem Juli bis Dezember","Mangrovenweg und Vögel im Biologischen Reservat Nosara","Abendessen im La Luna in Pelada oder im The Gilded Iguana"],["Für die Kleine","Playa Guiones bei Ebbe, riesiger flacher Sand und kleine Wellen zum Planschen","Gezeitenbecken an der Playa Pelada, Krabben und kleine Fische","Sibu Sanctuary, Affen und Faultiere, geführte Tour mit Voranmeldung","Mini Surf oder Bodyboard Stunde: Safari Surf School und Coconut Harry\u2019s nehmen Kinder ab etwa 5, für die Kleine lieber Schaumbrett im Weißwasser mit Papa","Eis im Beach Dog Café"]] },
-  { id:"sj3", type:"home", from:"12. Jän", to:"21. Jän", nights:9, title:"San José und spontane Ausflüge", place:"Zurück daheim für den letzten Abschnitt. Nichts fix, Tagesausflüge und kurze Trips nach Lust und Laune: Poás, Cartago, eine Kaffeefarm, ein Strandtag.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Zuhause","Ausflüge"], drive:"Nosara nach San José sind etwa 4,5 Stunden mit dem Auto oder ein kurzer Inlandsflug.", trackable:false,
+  { id:"sj3", type:"home", from:"12. Jän", to:"21. Jän", nights:9, foodDefault:600, title:"San José und spontane Ausflüge", place:"Zurück daheim für den letzten Abschnitt. Nichts fix, Tagesausflüge und kurze Trips nach Lust und Laune: Poás, Cartago, eine Kaffeefarm, ein Strandtag.", hotel:null, img:"img/gen-sj2.jpg", cap:"San José", tags:["Zuhause","Ausflüge"], drive:"Nosara nach San José sind etwa 4,5 Stunden mit dem Auto oder ein kurzer Inlandsflug.", trackable:false,
     todo:[["Spontane Trips","Puerto Viejo oder Cahuita an der Karibik, 4 Stunden, Faultiere und eine ganz andere Stimmung","Vulkan Arenal und die heißen Quellen von Tabacón, mit Übernachtung","Manuel Antonio, Affen am Strand, mit Übernachtung","Orosi Tal und der Botanische Garten Lankester, einfacher Tagesausflug","Turrialba und die Ruinen von Guayabo"],["In San José","Abschiedsessen im Barrio Escalante","Feria Verde, Samstagsmarkt in Aranjuez","Spa oder Friseurtag für Josef und Renate vor dem Flug"],["Für die Kleine","Arenal: Thermalbecken mit Kinderbereich in Baldi oder Tabacón","Manuel Antonio: Affen und Faultiere direkt am Strand, Guide buchen","Karibik: Jaguar Rescue Center in Puerto Viejo, Tour am Vormittag reservieren","Sarchí: Ochsenkarren Werkstatt und der größte Ochsenkarren der Welt"]] },
-  { id:"flight", type:"flight", from:"21. Jän", to:"Wien", nights:0, title:"Rückflug nach Wien", place:"Abflug vom SJO am 21.", hotel:null, img:"img/gen-flight.jpg", cap:"Wien", tags:["Flug","SJO"], drive:null, trackable:true, isFlight:true,
+  { id:"flight", type:"flight", from:"21. Jän", to:"Wien", nights:0, foodDefault:0, title:"Rückflug nach Wien", place:"Abflug vom SJO am 21.", hotel:null, img:"img/gen-flight.jpg", cap:"Wien", tags:["Flug","SJO"], drive:null, trackable:true, isFlight:true,
     todo:[["Vor dem Flug","Online Check in öffnet 24 Stunden vorher","SJO ist ohne Verkehr 45 Minuten von San Pedro, unter der Woche 1,5 Stunden einplanen","Letzte Mitbringsel: Kaffee und Schokolade bei Britt im Terminal"],["Für die Kleine","Kinderwagen bis zum Gate, Tablet laden, Snacks einpacken","SJO hat einen kleinen Spielbereich nach der Sicherheitskontrolle"]] }
 ];
 
@@ -233,8 +251,9 @@ const isOpen = id => !closed.has(id);
 if(state.intercontinental && state.intercontinental.price==="1126") state.intercontinental.price="1220";
 if(state.savegre && !state.savegre.booked && !state.savegre.price){ state.savegre.booked=true; state.savegre.price="2177"; }
 if(state.savegre && state.savegre.notes==="Booking.com confirmation 5738425501") state.savegre.notes="";
+LEGS.forEach(l=>{ const st=state[l.id]; if(st){ if(st.food===undefined) st.food=l.foodDefault?String(l.foodDefault):""; if(!st.split) st.split="half"; } });
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }
-function get(id){ if(!state[id]){ const l=LEGS.find(x=>x.id===id); state[id]={booked:!!(l&&l.defaultBooked), price:(l&&l.defaultPrice)?String(l.defaultPrice):"", notes:(l&&l.defaultNotes)||""}; } return state[id]; }
+function get(id){ if(!state[id]){ const l=LEGS.find(x=>x.id===id); state[id]={booked:!!(l&&l.defaultBooked), price:(l&&l.defaultPrice)?String(l.defaultPrice):"", notes:(l&&l.defaultNotes)||"", food:(l&&l.foodDefault)?String(l.foodDefault):"", split:"half"}; } return state[id]; }
 function money(n){ return n.toLocaleString("de-AT",{maximumFractionDigits:0})+" USD"; }
 const pad = n => String(n).padStart(2,"0");
 const plus = '<span class="circle"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>';
@@ -268,14 +287,21 @@ function render(){
         <div class="chips">${leg.tags.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
         ${leg.todo ? `<div class="todo">${leg.todo.map(([h,...items])=>`<details><summary>${h}${plus}</summary><ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul></details>`).join("")}</div>` : ""}
         ${leg.details ? `<dl class="details">${leg.details.map(([k,v])=>`<dt>${k}</dt><dd class="${/^(Buchungsnummer|PIN)$/.test(k)&&v!=="ausstehend"?"code":""}">${v}</dd>`).join("")}</dl>` : ""}
-        ${leg.trackable ? `
         <div class="ctl">
-          <div class="ctl-top">
+          ${leg.trackable ? `<div class="ctl-top">
             <label class="tog ${s.booked?"on":""}"><input type="checkbox" data-id="${leg.id}" data-k="booked" ${s.booked?"checked":""}><span class="sw"></span>${s.booked?"Gebucht":"Noch nicht gebucht"}</label>
-            <div class="price"><label>${leg.isFlight?"Flüge":"Preis"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>
-          </div>
-          <textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea>
-        </div>` : ""}
+            <div class="price"><label>${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>
+          </div>` : ""}
+          ${leg.isFlight ? "" : `<div class="ctl-top" style="margin-top:${leg.trackable?"10px":"0"}">
+            <div class="split"><label>Aufteilung</label><select data-id="${leg.id}" data-k="split">
+              <option value="half" ${s.split==="half"?"selected":""}>50 / 50</option>
+              <option value="jr" ${s.split==="jr"?"selected":""}>Josef & Renate</option>
+              <option value="us" ${s.split==="us"?"selected":""}>Matt, Rhina & Kleine</option>
+            </select></div>
+            <div class="price"><label>Essen, Schätzung</label><div class="in"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>
+          </div>`}
+          ${leg.trackable ? `<textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea>` : ""}
+        </div>
       </div></div></div>`;
     list.appendChild(row);
   });
@@ -290,7 +316,9 @@ list.addEventListener("click", e => {
   const on = isOpen(id); row.classList.toggle("open",on); h.setAttribute("aria-expanded",on);
 });
 list.addEventListener("change", e => {
-  const t = e.target; if(!t.dataset.id || t.dataset.k!=="booked") return;
+  const t = e.target; if(!t.dataset.id) return;
+  if(t.dataset.k==="split"){ get(t.dataset.id).split = t.value; save(); stats(); return; }
+  if(t.dataset.k!=="booked") return;
   const s = get(t.dataset.id); s.booked = t.checked; save();
   const row = t.closest(".row"); row.classList.toggle("booked", s.booked);
   const tog = t.closest(".tog"); tog.classList.toggle("on", s.booked); tog.lastChild.textContent = s.booked?"Gebucht":"Noch nicht gebucht";
@@ -302,20 +330,30 @@ list.addEventListener("input", e => {
   const t = e.target; if(!t.dataset.id) return;
   const s = get(t.dataset.id);
   if(t.dataset.k==="price"){ s.price = t.value; save(); stats(); }
+  if(t.dataset.k==="food"){ s.food = t.value; save(); stats(); }
   if(t.dataset.k==="notes"){ s.notes = t.value; save(); }
 });
 
+const num = v => parseFloat(v)||0;
+function shares(l){ const st=get(l.id); const stay=num(st.price), food=num(st.food); const tot=stay+food;
+  const f = st.split==="jr" ? [tot,0] : st.split==="us" ? [0,tot] : [tot/2,tot/2]; return {stay,food,tot,jr:f[0],us:f[1]}; }
 function stats(){
   const tr = LEGS.filter(l=>l.trackable);
   const booked = tr.filter(l=>get(l.id).booked).length;
-  const total = tr.reduce((a,l)=>a+(parseFloat(get(l.id).price)||0),0);
+  let stay=0,food=0,jr=0,us=0;
+  LEGS.forEach(l=>{ const x=shares(l); stay+=x.stay; food+=x.food; jr+=x.jr; us+=x.us; });
+  const total=stay+food;
   const nights = LEGS.filter(l=>l.type==="hotel").reduce((a,l)=>a+l.nights,0);
   document.getElementById("statBooked").textContent = booked+" / "+tr.length;
   document.getElementById("barBooked").style.width = (booked/tr.length*100)+"%";
   document.getElementById("statTotal").textContent = money(total);
   document.getElementById("bigTotal").textContent = money(total);
   document.getElementById("statNights").textContent = nights;
-  document.getElementById("rows").innerHTML = tr.map(l=>`<span>${l.hotel?l.hotel.name:l.title}</span><span>${get(l.id).price?money(parseFloat(get(l.id).price)):"·"}</span>`).join("");
+  document.getElementById("sumStay").textContent = money(stay);
+  document.getElementById("sumFood").textContent = money(food);
+  document.getElementById("famJR").textContent = money(jr);
+  document.getElementById("famUS").textContent = money(us);
+  document.getElementById("rows").innerHTML = LEGS.filter(l=>shares(l).tot>0).map(l=>{ const x=shares(l); const who = get(l.id).split==="jr"?"J & R":get(l.id).split==="us"?"wir":"50/50"; return `<span>${l.hotel?l.hotel.name:l.title}<small> · ${who}${x.food?`, Essen ${money(x.food)}`:""}</small></span><span>${money(x.tot)}</span>`; }).join("");
 }
 
 function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
@@ -326,11 +364,12 @@ function copyPlan(){
     out += `${l.from} bis ${l.to}: ${l.title}`;
     if(l.hotel) out += `\n  ${l.hotel.name} (${l.hotel.url})`;
     if(l.details) l.details.forEach(([k,v])=>{ out += `\n  ${k}: ${v}`; });
-    if(l.trackable) out += `\n  ${s.booked?"GEBUCHT":"nicht gebucht"}${s.price?`, $${s.price}`:""}${s.notes?`, ${s.notes}`:""}`;
+    if(l.trackable) out += `\n  ${s.booked?"GEBUCHT":"nicht gebucht"}${s.price?`, Unterkunft $${s.price}`:""}${s.notes?`, ${s.notes}`:""}`;
+    if(!l.isFlight) out += `\n  Essen geschätzt $${s.food||0}, Aufteilung ${s.split==="jr"?"Josef & Renate":s.split==="us"?"Matt, Rhina & Kleine":"50/50"}`;
     out += "\n\n";
   });
-  const total = LEGS.filter(l=>l.trackable).reduce((a,l)=>a+(parseFloat(get(l.id).price)||0),0);
-  out += `Budget bisher: ${money(total)}`;
+  let jr=0,us=0; LEGS.forEach(l=>{const x=shares(l); jr+=x.jr; us+=x.us;});
+  out += `Gesamt: ${money(jr+us)}\nJosef & Renate: ${money(jr)}\nMatt, Rhina & Kleine: ${money(us)}`;
   navigator.clipboard.writeText(out).then(()=>toast("Kopiert")).catch(()=>toast("Kopieren vom Browser blockiert"));
 }
 document.getElementById("copyBtn").addEventListener("click", copyPlan);
