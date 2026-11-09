@@ -69,11 +69,13 @@
   @media(min-width:640px){.hero-body{padding:0 40px 48px}.hero-top{padding:28px 40px 0}}
 
   /* overview stats */
-  .meter{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
-  .meter div{background:#fff;border-radius:14px;padding:14px 14px 12px}
-  .meter .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
-  .meter .v{font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:4px}
-  .meter .bar{height:3px;background:#E6E6E2;border-radius:99px;margin-top:10px;overflow:hidden}
+  .meter{display:grid;grid-template-columns:repeat(3,1fr);margin-top:14px;background:#fff;border-radius:16px;padding:16px 0 14px;position:relative;overflow:hidden}
+  .meter>div:not(.bar){padding:0 14px;border-right:1px solid var(--line);min-width:0}
+  .meter>div:nth-child(3){border-right:0}
+  .meter .l{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:600;white-space:nowrap}
+  .meter .v{font-size:clamp(18px,5.5vw,24px);font-weight:500;letter-spacing:-.02em;margin-top:6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .meter .v small{font-size:10px;font-weight:600;color:var(--mute);margin-left:4px;letter-spacing:.06em}
+  .meter .bar{grid-column:1/-1;height:3px;background:#E6E6E2;margin:14px 14px 0;border-radius:99px;overflow:hidden}
   .meter .bar i{display:block;height:100%;background:var(--lime);width:0;transition:width .5s var(--ease)}
 
   /* accordion */
@@ -219,9 +221,11 @@
     </div>
   </div>
   <div class="meter">
-    <div><div class="l">Gebucht</div><div class="v" id="statBooked">0 / 0</div><div class="bar"><i id="barBooked"></i></div></div>
-    <div><div class="l">Budget</div><div class="v" id="statTotal">0 USD</div></div>
+    <div><div class="l">Gebucht</div><div class="v" id="statBooked">0 / 0</div></div>
+    <div><div class="l">Budget</div><div class="v"><span id="statTotal">0</span><small>USD</small></div></div>
     <div><div class="l">Hotelnächte</div><div class="v" id="statNights">0</div></div>
+    <div class="bar"><i id="barBooked"></i></div>
+  </div>
   </div>
 </section>
 
@@ -382,7 +386,7 @@ function stats(){
   const nights = LEGS.filter(l=>l.type==="hotel").reduce((a,l)=>a+l.nights,0);
   document.getElementById("statBooked").textContent = booked+" / "+tr.length;
   document.getElementById("barBooked").style.width = (booked/tr.length*100)+"%";
-  document.getElementById("statTotal").textContent = money(total);
+  document.getElementById("statTotal").textContent = total.toLocaleString("de-AT",{maximumFractionDigits:0});
   document.getElementById("bigTotal").textContent = money(total);
   document.getElementById("statNights").textContent = nights;
   document.getElementById("sumStay").textContent = money(stay);
