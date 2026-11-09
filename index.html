@@ -17,7 +17,7 @@
   body{touch-action:pan-y;overscroll-behavior-y:none;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55;font-size:15px;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
   a{color:inherit;text-decoration:none}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-  .wrap{max-width:560px;margin:0 auto;padding:0 24px}
+  .wrap{max-width:600px;margin:0 auto;padding:0 20px}
 
   /* top bar */
   .top{position:sticky;top:0;z-index:20;background:rgba(242,239,231,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
@@ -33,7 +33,7 @@
   .eyebrow{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:18px}
   .eyebrow::before{content:"★";color:var(--ink);font-size:10px;opacity:.8}
   .eyebrow{color:var(--mute)}
-  h1,h2.big{font-size:clamp(28px,7vw,36px);font-weight:500;line-height:1.15;letter-spacing:-.02em;margin-bottom:16px}
+  h1,h2.big{font-size:clamp(34px,9vw,46px);font-weight:500;line-height:1.08;letter-spacing:-.03em;margin-bottom:18px}
   h1.title{text-transform:uppercase;font-weight:500;font-size:clamp(30px,8vw,40px);letter-spacing:-.01em;line-height:1.08}
   h1.title em{font-style:italic;font-weight:400}
   h1 .g,h2.big .g{color:var(--soft)}
@@ -43,11 +43,24 @@
   .link::after,.reserve::after{content:"↗";font-size:12px}
   .link .circle{width:30px;height:30px}
 
-  section{padding:44px 0 8px}
-  section.hero{padding-top:36px}
+  section{padding:52px 0 8px}
+  section.hero{padding-top:14px}
+  .hero-card{position:relative;border-radius:28px;overflow:hidden;min-height:min(78vh,640px);display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:var(--ink)}
+  .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(47,74,51,.15) 0%,rgba(47,74,51,.05) 35%,rgba(31,45,33,.82) 100%)}
+  .hero-top{position:relative;display:flex;justify-content:space-between;gap:8px;padding:18px 18px 0;flex-wrap:wrap}
+  .hero-tag{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25)}
+  .hero-body{position:relative;padding:0 22px 26px}
+  .hero-card h1.title{font-size:clamp(52px,15vw,96px);line-height:.92;margin-bottom:18px;color:#fff;letter-spacing:-.03em}
+  .hero-card h1.title em{color:var(--lime)}
+  .hero-lead{font-size:15px;line-height:1.6;color:rgba(255,255,255,.85);max-width:40ch;margin-bottom:22px}
+  .hero-cta{display:flex;gap:8px;flex-wrap:wrap}
+  .btn.lime{flex:0 0 auto;background:var(--lime);color:var(--ink);padding:14px 22px}
+  .btn.glass{flex:0 0 auto;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:14px 22px}
+  @media(min-width:640px){.hero-card{min-height:600px}.hero-body{padding:0 36px 36px}.hero-top{padding:24px 24px 0}}
 
   /* overview stats */
-  .meter{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}
+  .meter{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
   .meter div{background:#fff;border-radius:14px;padding:14px 14px 12px}
   .meter .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
   .meter .v{font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:4px}
@@ -66,7 +79,7 @@
   .date .big{font-size:clamp(20px,5vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.1}
   .date .sub{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
   .row-h{width:100%;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:0 0 14px;text-align:left}
-  .row-h .t{font-size:clamp(22px,5vw,28px);font-weight:500;letter-spacing:-.02em;line-height:1.15;margin-top:6px}
+  .row-h .t{font-size:clamp(24px,6vw,30px);font-weight:500;letter-spacing:-.02em;line-height:1.15;margin-top:6px}
   .row-h .d{font-size:12px;color:var(--mute);margin-top:6px;display:flex;gap:8px;align-items:center}
   .row-h .d .b{display:none}
   .row-h .d .b{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--line)}
@@ -169,10 +182,16 @@
 <main class="wrap">
 
 <section class="hero fade">
-  <h1 class="title"><em>Costa Rica</em><br>26/27</h1>
-  <p class="lead">Josef und Renate, ein Monat vom Nebelwald bis zum Pazifik. 21. Dezember bis 21. Jänner.</p>
-  <a class="link" href="#stays">Zu den Stationen</a>
-  <div class="fig" style="margin-top:26px;aspect-ratio:4/5"><img src="img/savegre.jpg" alt="Quetzal in the Savegre valley" onerror="this.onerror=null;this.src='img/gen-savegre.jpg'"><span class="pill tl"><span class="n">02</span>Quetzal im Savegre Tal</span></div>
+  <div class="hero-card">
+    <img class="hero-img" src="img/savegre.jpg" alt="Quetzal im Savegre Tal" onerror="this.onerror=null;this.src='img/gen-savegre.jpg'">
+    <div class="hero-shade"></div>
+    <div class="hero-top"><span class="hero-tag">★ Familienreise</span><span class="hero-tag">21. Dez 2026 bis 21. Jän 2027</span></div>
+    <div class="hero-body">
+      <h1 class="title"><em>Costa Rica</em><br>26/27</h1>
+      <p class="hero-lead">Josef und Renate, ein Monat vom Nebelwald bis zum Pazifik. Weihnachten in San José, Quetzale in Copey, Silvester in Escazú, Strandwoche in Guanacaste, Surfer Finale in Nosara.</p>
+      <div class="hero-cta"><a class="btn lime" href="#stays">Zu den Stationen</a><a class="btn glass" href="#budget">Budget</a></div>
+    </div>
+  </div>
   <div class="meter">
     <div><div class="l">Gebucht</div><div class="v" id="statBooked">0 / 0</div><div class="bar"><i id="barBooked"></i></div></div>
     <div><div class="l">Budget</div><div class="v" id="statTotal">0 USD</div></div>
