@@ -44,23 +44,25 @@
   .link .circle{width:30px;height:30px}
 
   section{padding:52px 0 8px}
-  section.hero{padding-top:14px}
-  .hero-card{position:relative;border-radius:28px;overflow:hidden;min-height:min(78vh,640px);display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:var(--ink)}
+  section.hero{padding-top:0}
+  .hero-card{position:relative;margin:0 calc(50% - 50vw);border-radius:0;overflow:hidden;min-height:calc(100svh - 56px);display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:var(--ink)}
+  .hero-top,.hero-body{width:100%;max-width:1100px;margin-left:auto;margin-right:auto}
+  .hero-kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--lime);margin-bottom:14px}
   .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
-  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(47,74,51,.15) 0%,rgba(47,74,51,.05) 35%,rgba(31,45,33,.82) 100%)}
+  .hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(47,74,51,.25) 0%,rgba(47,74,51,.05) 35%,rgba(31,45,33,.9) 100%)}
   .hero-top{position:relative;display:flex;justify-content:space-between;gap:8px;padding:18px 18px 0;flex-wrap:wrap}
   .hero-tag{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25)}
   .hero-body{position:relative;padding:0 22px 26px}
-  .hero-card h1.title{font-size:clamp(52px,15vw,96px);line-height:.92;margin-bottom:18px;color:#fff;letter-spacing:-.03em}
+  .hero-card h1.title{font-size:clamp(56px,16vw,140px);line-height:.92;margin-bottom:18px;color:#fff;letter-spacing:-.03em}
   .hero-card h1.title em{color:var(--lime)}
-  .hero-lead{font-size:15px;line-height:1.6;color:rgba(255,255,255,.85);max-width:40ch;margin-bottom:22px}
+  .hero-lead{font-size:clamp(15px,2vw,19px);line-height:1.6;color:rgba(255,255,255,.88);max-width:46ch;margin-bottom:26px}
   .hero-cta{display:flex;gap:8px;flex-wrap:wrap}
   .btn.lime{flex:0 0 auto;background:var(--lime);color:var(--ink);padding:14px 22px}
   .btn.glass{flex:0 0 auto;background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:14px 22px}
-  @media(min-width:640px){.hero-card{min-height:600px}.hero-body{padding:0 36px 36px}.hero-top{padding:24px 24px 0}}
+  @media(min-width:640px){.hero-body{padding:0 40px 48px}.hero-top{padding:28px 40px 0}}
 
   /* overview stats */
-  .meter{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .meter{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
   .meter div{background:#fff;border-radius:14px;padding:14px 14px 12px}
   .meter .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
   .meter .v{font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:4px}
@@ -199,10 +201,11 @@
   <div class="hero-card">
     <img class="hero-img" src="img/savegre.jpg" alt="Quetzal im Savegre Tal" onerror="this.onerror=null;this.src='img/gen-savegre.jpg'">
     <div class="hero-shade"></div>
-    <div class="hero-top"><span class="hero-tag">★ Familienreise</span><span class="hero-tag">21. Dez 2026 bis 21. Jän 2027</span></div>
+    <div class="hero-top"><span class="hero-tag">★ Josef & Renate zu Besuch</span><span class="hero-tag">21. Dez bis 21. Jän</span></div>
     <div class="hero-body">
+      <p class="hero-kicker">Ein Monat Pura Vida</p>
       <h1 class="title"><em>Costa Rica</em><br>26/27</h1>
-      <p class="hero-lead">Josef und Renate, ein Monat vom Nebelwald bis zum Pazifik. Weihnachten in San José, Quetzale in Copey, Silvester in Escazú, Strandwoche in Guanacaste, Surfer Finale in Nosara.</p>
+      <p class="hero-lead">Vom Nebelwald bis zum Pazifik: Weihnachten daheim in San José, Quetzale in den Bergen, Silvester mit der Familie Portillo, eine Woche Strand in Guanacaste und zum Schluss Surfen in Nosara.</p>
       <div class="hero-cta"><a class="btn lime" href="#stays">Zu den Stationen</a><a class="btn glass" href="#budget">Budget</a></div>
     </div>
   </div>
