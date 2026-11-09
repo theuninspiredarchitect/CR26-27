@@ -122,13 +122,13 @@
   .tog .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s var(--ease);box-shadow:0 1px 3px rgba(0,0,0,.15)}
   .tog.on .sw{background:var(--lime)}
   .tog.on .sw::after{transform:translateX(16px)}
-  .in{display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s;width:140px;box-sizing:border-box}
-  .in:focus-within{border-color:var(--ink)}
-  .in span{color:var(--mute);font-size:13px}
-  .in input{border:0;outline:0;width:100%;min-width:0;padding:9px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
+  .inp{display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s;width:140px;box-sizing:border-box}
+  .inp:focus-within{border-color:var(--ink)}
+  .inp span{color:var(--mute);font-size:13px}
+  .inp input{border:0;outline:0;width:100%;min-width:0;padding:9px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
   .ctl textarea{width:100%;border:1px solid transparent;border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;background:var(--bg);resize:vertical;min-height:40px;color:var(--ink);transition:border-color .2s}
   .ctl textarea:focus{outline:0;border-color:var(--ink)}
-  .ctl textarea::placeholder,.in input::placeholder{color:var(--soft)}
+  .ctl textarea::placeholder,.inp input::placeholder{color:var(--soft)}
 
   /* budget card */
   .card{background:#fff;border-radius:22px;padding:22px 20px;margin-top:26px}
@@ -290,8 +290,8 @@ function render(){
         ${leg.details ? `<dl class="details">${leg.details.map(([k,v])=>`<dt>${k}</dt><dd class="${/^(Buchungsnummer|PIN)$/.test(k)&&v!=="ausstehend"?"code":""}">${v}</dd>`).join("")}</dl>` : ""}
         <div class="ctl">
           ${leg.trackable ? `<div class="crow"><label class="tog ${s.booked?"on":""}"><input type="checkbox" data-id="${leg.id}" data-k="booked" ${s.booked?"checked":""}><span class="sw"></span>${s.booked?"Gebucht":"Noch nicht gebucht"}</label></div>` : ""}
-          ${leg.trackable ? `<div class="crow"><label class="lbl">${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="in"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>` : ""}
-          ${leg.isFlight ? "" : `<div class="crow"><label class="lbl">Essen, Schätzung</label><div class="in"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>`}
+          ${leg.trackable ? `<div class="crow"><label class="lbl">${leg.isFlight?"Flüge":"Unterkunft"}</label><div class="inp"><span>$</span><input type="number" min="0" step="1" placeholder="0" data-id="${leg.id}" data-k="price" value="${s.price}"></div></div>` : ""}
+          ${leg.isFlight ? "" : `<div class="crow"><label class="lbl">Essen, Schätzung</label><div class="inp"><span>$</span><input type="number" min="0" step="10" placeholder="0" data-id="${leg.id}" data-k="food" value="${s.food}"></div></div>`}
           ${leg.trackable ? `<div class="crow"><textarea rows="1" placeholder="Notizen: Buchungsnummer, Zimmertyp, wer gebucht hat …" data-id="${leg.id}" data-k="notes">${s.notes}</textarea></div>` : ""}
         </div>
       </div></div></div>`;
