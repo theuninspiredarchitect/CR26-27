@@ -111,23 +111,28 @@
   .todo li{font-size:13px;color:var(--mute);line-height:1.55;padding:5px 0 5px 16px;position:relative}
   .todo li::before{content:"";position:absolute;left:0;top:12px;width:6px;height:6px;border-radius:50%;background:var(--lime)}
   .ctl{background:#fff;border-radius:var(--r);padding:14px}
-  .ctl-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .ctl-top{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}
+  .ctl-top+.ctl-top{margin-top:10px!important;padding-top:10px;border-top:1px solid var(--line)}
+  .ctl-top:empty{display:none}
   .tog{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:600;cursor:pointer;user-select:none}
   .tog input{display:none}
   .tog .sw{width:40px;height:24px;border-radius:999px;background:#D6D2C6;position:relative;transition:background .25s}
   .tog .sw::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s var(--ease);box-shadow:0 1px 3px rgba(0,0,0,.15)}
   .tog.on .sw{background:var(--lime)}
   .tog.on .sw::after{transform:translateX(16px)}
-  .price{display:inline-flex;align-items:center;gap:8px}
+  .price{display:grid;grid-template-columns:1fr 150px;align-items:center;gap:12px;justify-self:stretch;grid-column:1/-1}
+  .ctl-top:has(.tog) .price{grid-column:auto;grid-template-columns:auto 150px}
+  .price .in{width:150px}
   .split{display:inline-flex;align-items:center;gap:8px}
   .split label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
   .split select{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:var(--bg);border:1px solid transparent;border-radius:10px;padding:8px 10px;outline:0}
   .split select:focus{border-color:var(--ink)}
-  .price label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600}
-  .price .in{display:flex;align-items:center;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s}
+  .price label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);font-weight:600;text-align:right}
+  .ctl-top:not(:has(.tog)) .price label{text-align:left}
+  .price .in{display:flex;align-items:center;box-sizing:border-box;background:var(--bg);border-radius:10px;padding:0 10px;border:1px solid transparent;transition:border-color .2s}
   .price .in:focus-within{border-color:var(--ink)}
   .price .in span{color:var(--mute);font-size:13px}
-  .price input{border:0;outline:0;width:96px;padding:8px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
+  .price input{border:0;outline:0;width:100%;min-width:0;padding:8px 4px;font:inherit;font-size:14px;text-align:right;background:transparent;color:var(--ink)}
   .ctl textarea{width:100%;margin-top:12px;border:1px solid transparent;border-radius:10px;padding:10px 12px;font:inherit;font-size:13px;background:var(--bg);resize:vertical;min-height:40px;color:var(--ink);transition:border-color .2s}
   .ctl textarea:focus{outline:0;border-color:var(--ink)}
   .ctl textarea::placeholder,.price input::placeholder{color:var(--soft)}
